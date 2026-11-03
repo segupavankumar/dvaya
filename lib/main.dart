@@ -6,6 +6,7 @@ import 'screens/login/login_screen.dart';
 import 'screens/owner/owner_shell.dart';
 import 'screens/member/member_shell.dart';
 import 'screens/solo/solo_shell.dart';
+import 'screens/coach/coach_shell.dart';
 import 'data/models.dart';
 
 void main() {
@@ -41,6 +42,8 @@ class DvayaApp extends ConsumerWidget {
         return const MemberShell();
       case UserRole.solo:
         return const SoloShell();
+      case UserRole.coach:
+        return const CoachShell();
     }
   }
 }

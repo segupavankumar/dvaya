@@ -1,4 +1,4 @@
-enum UserRole { owner, member, solo }
+enum UserRole { owner, member, solo, coach }
 enum MemberStatus { active, expiring, expired }
 enum MealTime { earlyMorning, breakfast, midMorning, lunch, eveningSnack, dinner, beforeBed }
 
@@ -233,6 +233,30 @@ class SubscriptionPlan {
     required this.name,
     required this.price,
     required this.durationMonths,
+  });
+}
+
+class Coach {
+  final String id;
+  final String gymId;
+  final String name;
+  final String phone;
+  final String email;
+  final String specialization;
+  final int yearsExperience;
+  final List<String> assignedMemberIds;
+  final List<AttendanceRecord> attendance;
+
+  const Coach({
+    required this.id,
+    required this.gymId,
+    required this.name,
+    required this.phone,
+    required this.email,
+    required this.specialization,
+    required this.yearsExperience,
+    this.assignedMemberIds = const [],
+    this.attendance = const [],
   });
 }
 

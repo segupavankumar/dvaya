@@ -14,7 +14,7 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  String? _step; // null = role select, 'owner' = gym pick, 'member_type' = gym or solo, 'member_gym' = pick gym, 'member_pick' = pick member
+  String? _step; // null = role select, 'owner' = gym pick, 'member_type' = gym or solo, 'member_gym' = pick gym, 'member_pick' = pick member, 'coach_gym' = pick gym for coach, 'coach_pick' = pick coach
 
   Gym? _selectedGym;
 
@@ -36,6 +36,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               if (_step == 'member_type') _buildMemberTypePicker(),
               if (_step == 'member_gym') _buildMemberGymPicker(),
               if (_step == 'member_pick') _buildMemberPicker(),
+              if (_step == 'coach_gym') _buildCoachGymPicker(),
+              if (_step == 'coach_pick') _buildCoachPicker(),
               if (_step != null) ...[
                 const SizedBox(height: 24),
                 TextButton(
@@ -91,6 +93,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           title: "I'm a Member",
           subtitle: 'Access your workouts, diet & progress',
           onTap: () => setState(() => _step = 'member_type'),
+        ),
+        const SizedBox(height: 16),
+        _loginCard(
+          icon: Icons.sports_outlined,
+          title: "I'm a Coach",
+          subtitle: 'Manage your trainees & track sessions',
+          onTap: () => setState(() => _step = 'coach_gym'),
         ),
       ],
     );
@@ -165,6 +174,76 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           }),
         )),
       ],
+    );
+  }
+
+  Widget _buildCoachGymPicker() {
+    return Column(
+      children: [
+        Text('Select Your Gym', style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+        const SizedBox(height: 32),
+        ...gyms.map((gym) => Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: _gymCard(gym, onTap: () {
+            setState(() { _selectedGym = gym; _step = 'coach_pick'; });
+          }),
+        )),
+      ],
+    );
+  }
+
+  Widget _buildCoachPicker() {
+    final gymCoaches = coaches.where((c) => c.gymId == _selectedGym!.id).toList();
+    return Column(
+      children: [
+        Text('Select Your Profile', style: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+        const SizedBox(height: 8),
+        Text(_selectedGym!.name, style: GoogleFonts.poppins(color: AppColors.accent, fontSize: 14)),
+        const SizedBox(height: 32),
+        ...gymCoaches.map((coach) => Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: _coachCard(coach, onTap: () {
+            ref.read(authProvider.notifier).loginAsCoach(_selectedGym!, coach);
+          }),
+        )),
+      ],
+    );
+  }
+
+  Widget _coachCard(Coach coach, {required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border, width: 0.5),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 24,
+              backgroundColor: AppColors.success.withValues(alpha: 0.15),
+              child: Text(coach.name.split(' ').last[0], style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.success)),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(coach.name, style: GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                  Text(coach.specialization, style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textSecondary)),
+                  Text('${coach.assignedMemberIds.length} trainee${coach.assignedMemberIds.length != 1 ? 's' : ''} • ${coach.yearsExperience}yr exp', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: AppColors.textTertiary),
+          ],
+        ),
+      ),
     );
   }
 

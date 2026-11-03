@@ -419,6 +419,42 @@ Map<DateTime, DietDay> getSoloDiet() {
   };
 }
 
+final coaches = [
+  Coach(
+    id: 'c1',
+    gymId: 'gym1',
+    name: 'Coach Ravi',
+    phone: '+91 97654 32100',
+    email: 'ravi.trainer@email.com',
+    specialization: 'Strength & Conditioning',
+    yearsExperience: 6,
+    assignedMemberIds: ['m1'],
+    attendance: _generateAttendance(25),
+  ),
+  Coach(
+    id: 'c2',
+    gymId: 'gym1',
+    name: 'Coach Sneha',
+    phone: '+91 96543 21000',
+    email: 'sneha.trainer@email.com',
+    specialization: 'Functional Training & Flexibility',
+    yearsExperience: 4,
+    assignedMemberIds: ['m2'],
+    attendance: _generateAttendance(20),
+  ),
+  Coach(
+    id: 'c3',
+    gymId: 'gym2',
+    name: 'Coach Anil',
+    phone: '+91 95432 10000',
+    email: 'anil.trainer@email.com',
+    specialization: 'Powerlifting & Muscle Building',
+    yearsExperience: 8,
+    assignedMemberIds: ['m3'],
+    attendance: _generateAttendance(30),
+  ),
+];
+
 final recentActivities = [
   ActivityItem(icon: '🏋️', text: 'Rajesh Kumar checked in', time: '8:15 AM'),
   ActivityItem(icon: '💰', text: 'Priya Sharma payment due in 3 days', time: '7:00 AM'),

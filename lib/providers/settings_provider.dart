@@ -19,3 +19,4 @@ final memberSearchProvider = StateProvider<String>((ref) => '');
 final ownerTabProvider = StateProvider<int>((ref) => 0);
 final memberTabProvider = StateProvider<int>((ref) => 0);
 final soloTabProvider = StateProvider<int>((ref) => 0);
+final coachTabProvider = StateProvider<int>((ref) => 0);
