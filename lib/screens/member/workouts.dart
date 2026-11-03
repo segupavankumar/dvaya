@@ -67,7 +67,7 @@ class _MemberWorkoutsState extends ConsumerState<MemberWorkouts> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: 14,
         itemBuilder: (_, i) {
           final date = DateTime(now.year, now.month, now.day).subtract(Duration(days: 6 - i));

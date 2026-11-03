@@ -50,7 +50,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
               height: 80,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: _dateRange.length,
                 itemBuilder: (context, i) {
                   final date = _dateRange[i];

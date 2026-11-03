@@ -297,7 +297,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   // ===== OVERVIEW TAB =====
   Widget _buildOverview(Member member) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -444,7 +444,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final attendanceDates = {for (var a in member.attendance) DateTime(a.date.year, a.date.month, a.date.day): a};
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -595,7 +595,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -801,7 +801,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final dayWorkout = workouts[selectedDate];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -965,7 +965,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final dayDiet = diets[selectedDate];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1145,7 +1145,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   // ===== GOALS TAB =====
   Widget _buildGoals(Member member) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1296,7 +1296,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final isOverdue = daysLeft < 0;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1414,6 +1414,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
       height: 72,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         itemCount: 14,
         itemBuilder: (context, index) {
           final date = today.subtract(Duration(days: 7 - index));
