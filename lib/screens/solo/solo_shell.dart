@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/settings_provider.dart';
 import 'home.dart';
 import 'workouts.dart';
 import 'diet.dart';
 import 'progress.dart';
 import 'profile.dart';
 
-class SoloShell extends StatefulWidget {
+class SoloShell extends ConsumerWidget {
   const SoloShell({super.key});
 
   @override
-  State<SoloShell> createState() => _SoloShellState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(soloTabProvider);
 
-class _SoloShellState extends State<SoloShell> {
-  int _currentIndex = 0;
+    final screens = const [
+      SoloHome(),
+      SoloWorkouts(),
+      SoloDiet(),
+      SoloProgress(),
+      SoloProfile(),
+    ];
 
-  final _screens = const [
-    SoloHome(),
-    SoloWorkouts(),
-    SoloDiet(),
-    SoloProgress(),
-    SoloProfile(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: IndexedStack(index: currentIndex, children: screens),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
         ),
         child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (i) => setState(() => _currentIndex = i),
+          currentIndex: currentIndex,
+          onTap: (i) => ref.read(soloTabProvider.notifier).state = i,
+          type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.fitness_center_outlined), activeIcon: Icon(Icons.fitness_center), label: 'Workouts'),

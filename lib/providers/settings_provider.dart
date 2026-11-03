@@ -15,3 +15,7 @@ class DashboardConfigNotifier extends StateNotifier<Map<String, bool>> {
 
 final selectedMemberFilterProvider = StateProvider<String>((ref) => 'All');
 final memberSearchProvider = StateProvider<String>((ref) => '');
+
+final ownerTabProvider = StateProvider<int>((ref) => 0);
+final memberTabProvider = StateProvider<int>((ref) => 0);
+final soloTabProvider = StateProvider<int>((ref) => 0);

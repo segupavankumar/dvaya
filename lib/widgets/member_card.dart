@@ -6,8 +6,9 @@ import '../data/models.dart';
 class MemberCard extends StatelessWidget {
   final Member member;
   final VoidCallback? onTap;
+  final VoidCallback? onNotify;
 
-  const MemberCard({super.key, required this.member, this.onTap});
+  const MemberCard({super.key, required this.member, this.onTap, this.onNotify});
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,15 @@ class MemberCard extends StatelessWidget {
                 ],
               ),
             ),
+            if (onNotify != null)
+              IconButton(
+                onPressed: onNotify,
+                icon: const Icon(Icons.notifications_outlined, size: 20),
+                color: AppColors.accent,
+                tooltip: 'Send notification',
+                constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                padding: EdgeInsets.zero,
+              ),
             const Icon(Icons.chevron_right, color: AppColors.textTertiary),
           ],
         ),

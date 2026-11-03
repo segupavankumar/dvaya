@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../theme/app_theme.dart';
+import '../../providers/settings_provider.dart';
 import 'home.dart';
 import 'qr_checkin.dart';
 import 'workouts.dart';
 import 'diet_plan.dart';
 import 'profile.dart';
 
-class MemberShell extends StatefulWidget {
+class MemberShell extends ConsumerWidget {
   const MemberShell({super.key});
 
   @override
-  State<MemberShell> createState() => _MemberShellState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(memberTabProvider);
 
-class _MemberShellState extends State<MemberShell> {
-  int _currentIndex = 0;
+    final screens = const [
+      MemberHome(),
+      QrCheckin(),
+      MemberWorkouts(),
+      MemberDietPlan(),
+      MemberProfile(),
+    ];
 
-  final _screens = const [
-    MemberHome(),
-    QrCheckin(),
-    MemberWorkouts(),
-    MemberDietPlan(),
-    MemberProfile(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _screens),
+      body: IndexedStack(index: currentIndex, children: screens),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
         ),
         child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (i) => setState(() => _currentIndex = i),
+          currentIndex: currentIndex,
+          onTap: (i) => ref.read(memberTabProvider.notifier).state = i,
+          type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'Check In'),

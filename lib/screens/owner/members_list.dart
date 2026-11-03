@@ -14,7 +14,6 @@ class MembersList extends ConsumerWidget {
 
   List<Member> _buildFullList(String gymId) {
     final real = members.where((m) => m.gymId == gymId).toList();
-    // Generate extra dummy members for scrolling
     final extras = extraMemberNames.map((name) {
       final statuses = [MemberStatus.active, MemberStatus.active, MemberStatus.active, MemberStatus.expiring, MemberStatus.expired];
       final plans = ['Monthly', 'Quarterly', 'Annual'];
@@ -55,7 +54,6 @@ class MembersList extends ConsumerWidget {
 
     var allMembers = _buildFullList(gymId);
 
-    // Apply filter
     if (filter != 'All') {
       final status = {
         'Active': MemberStatus.active,
@@ -67,7 +65,6 @@ class MembersList extends ConsumerWidget {
       }
     }
 
-    // Apply search
     if (search.isNotEmpty) {
       allMembers = allMembers.where((m) => m.name.toLowerCase().contains(search.toLowerCase())).toList();
     }
@@ -80,10 +77,19 @@ class MembersList extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Text('Members', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+              child: Row(
+                children: [
+                  Text('Members', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.campaign_outlined, color: AppColors.accent),
+                    onPressed: () => _showBroadcastSheet(context),
+                    tooltip: 'Send broadcast notification',
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
-            // Search bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
@@ -97,45 +103,45 @@ class MembersList extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            // Filter tabs
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: ['All', 'Active', 'Expiring', 'Expired'].map((label) {
-                  final selected = filter == label;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: InkWell(
-                      onTap: () => ref.read(selectedMemberFilterProvider.notifier).state = label,
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: selected ? AppColors.accent : AppColors.surface,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: selected ? AppColors.accent : AppColors.border, width: 0.5),
-                        ),
-                        child: Text(
-                          label,
-                          style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                            color: selected ? Colors.white : AppColors.textSecondary,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: ['All', 'Active', 'Expiring', 'Expired'].map((label) {
+                    final selected = filter == label;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: InkWell(
+                        onTap: () => ref.read(selectedMemberFilterProvider.notifier).state = label,
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: selected ? AppColors.accent : AppColors.surface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: selected ? AppColors.accent : AppColors.border, width: 0.5),
+                          ),
+                          child: Text(
+                            label,
+                            style: GoogleFonts.poppins(
+                              fontSize: 13,
+                              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                              color: selected ? Colors.white : AppColors.textSecondary,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            // Count
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Text('${allMembers.length} members', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary)),
             ),
-            // Member list
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.fromLTRB(16, 4, 16, 80),
@@ -152,6 +158,7 @@ class MembersList extends ConsumerWidget {
                           MaterialPageRoute(builder: (_) => MemberDetail(member: member)),
                         );
                       },
+                      onNotify: () => _showNotifyMemberSheet(context, member),
                     ),
                   );
                 },
@@ -163,12 +170,175 @@ class MembersList extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.accent,
         onPressed: () => _showAddMemberSheet(context),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.person_add, color: Colors.white),
+      ),
+    );
+  }
+
+  void _showNotifyMemberSheet(BuildContext context, Member member) {
+    String selectedType = 'Payment Reminder';
+    final msgCtrl = TextEditingController();
+    final types = ['Payment Reminder', 'Workout Reminder', 'Diet Reminder', 'General Message'];
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 16),
+              Text('Send Notification', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+              const SizedBox(height: 4),
+              Text('To: ${member.name}', style: GoogleFonts.poppins(fontSize: 14, color: AppColors.accent)),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: types.map((type) {
+                  final selected = selectedType == type;
+                  return InkWell(
+                    onTap: () => setSheetState(() => selectedType = type),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: selected ? AppColors.accent : AppColors.surfaceElevated,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: selected ? AppColors.accent : AppColors.border),
+                      ),
+                      child: Text(type, style: GoogleFonts.poppins(fontSize: 12, color: selected ? Colors.white : AppColors.textSecondary)),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: msgCtrl,
+                maxLines: 3,
+                style: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Custom message (optional)...',
+                  hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('WhatsApp reminder sent to ${member.name}'),
+                          backgroundColor: AppColors.success,
+                        ));
+                      },
+                      icon: const Icon(Icons.chat, size: 18),
+                      label: const Text('WhatsApp'),
+                      style: OutlinedButton.styleFrom(foregroundColor: AppColors.success, side: const BorderSide(color: AppColors.success), padding: const EdgeInsets.symmetric(vertical: 14)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('$selectedType sent to ${member.name}'),
+                          backgroundColor: AppColors.success,
+                        ));
+                      },
+                      icon: const Icon(Icons.send, size: 18),
+                      label: const Text('Send'),
+                      style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showBroadcastSheet(BuildContext context) {
+    final msgCtrl = TextEditingController();
+    String target = 'All Members';
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 16),
+              Text('Broadcast Notification', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                initialValue: target,
+                dropdownColor: AppColors.surfaceElevated,
+                style: GoogleFonts.poppins(color: AppColors.textPrimary),
+                decoration: InputDecoration(labelText: 'Send to', labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary)),
+                items: ['All Members', 'Active Only', 'Expiring Soon', 'Expired']
+                    .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+                    .toList(),
+                onChanged: (v) => setSheetState(() => target = v!),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: msgCtrl,
+                maxLines: 3,
+                style: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Type your message...',
+                  hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Broadcast sent to $target'),
+                      backgroundColor: AppColors.success,
+                    ));
+                  },
+                  icon: const Icon(Icons.send),
+                  label: const Text('Send Broadcast'),
+                  style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 14)),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   void _showAddMemberSheet(BuildContext context) {
+    final nameCtrl = TextEditingController();
+    final phoneCtrl = TextEditingController();
+    final emailCtrl = TextEditingController();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -181,24 +351,25 @@ class MembersList extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2))),
-              ),
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 20),
               Text('Add New Member', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
               const SizedBox(height: 20),
               TextField(
+                controller: nameCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
                 decoration: const InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outline, color: AppColors.textTertiary)),
               ),
               const SizedBox(height: 12),
               TextField(
+                controller: phoneCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
                 decoration: const InputDecoration(hintText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined, color: AppColors.textTertiary)),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 12),
               TextField(
+                controller: emailCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
                 decoration: const InputDecoration(hintText: 'Email', prefixIcon: Icon(Icons.email_outlined, color: AppColors.textTertiary)),
                 keyboardType: TextInputType.emailAddress,
@@ -207,7 +378,13 @@ class MembersList extends ConsumerWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(nameCtrl.text.isNotEmpty ? '${nameCtrl.text} added' : 'New member added'),
+                      backgroundColor: AppColors.success,
+                    ));
+                  },
                   child: const Text('Add Member'),
                 ),
               ),

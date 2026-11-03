@@ -21,12 +21,17 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   late TabController _tabController;
   String? _assignedTrainer;
   DateTime _selectedDay = DateTime.now();
+  bool _workoutEditMode = false;
+  bool _dietEditMode = false;
+  String _goalText = '';
+  String _ownerNotes = '';
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 7, vsync: this);
     _assignedTrainer = widget.member.trainer;
+    _goalText = widget.member.goal ?? '';
   }
 
   @override
@@ -49,6 +54,13 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               backgroundColor: AppColors.background,
               pinned: true,
               expandedHeight: 200,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
+                  onPressed: () => _showNotificationSheet(member),
+                  tooltip: 'Send Notification',
+                ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: SafeArea(
                   child: Padding(
@@ -90,6 +102,82 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     );
   }
 
+  // ===== NOTIFICATION SHEET =====
+  void _showNotificationSheet(Member member) {
+    String notifType = 'Payment Reminder';
+    final msgCtrl = TextEditingController();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 20),
+              Text('Send Notification', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+              const SizedBox(height: 4),
+              Text('To: ${member.name}', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: ['Payment Reminder', 'Workout Reminder', 'Diet Reminder', 'General Message'].map((type) {
+                  final selected = notifType == type;
+                  return InkWell(
+                    onTap: () => setSheetState(() => notifType = type),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: selected ? AppColors.accent : AppColors.surfaceElevated,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: selected ? AppColors.accent : AppColors.border),
+                      ),
+                      child: Text(type, style: GoogleFonts.poppins(fontSize: 12, fontWeight: selected ? FontWeight.w600 : FontWeight.w400, color: selected ? Colors.white : AppColors.textSecondary)),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: msgCtrl,
+                maxLines: 3,
+                style: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Custom message (optional)',
+                  hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('$notifType sent to ${member.name}'),
+                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  },
+                  icon: const Icon(Icons.send, size: 18),
+                  label: const Text('Send Notification'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildHeader(Member member, Gym gym) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +205,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               const SizedBox(height: 4),
               Text('Joined ${DateFormat('MMM d, yyyy').format(member.joinDate)}', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
               const SizedBox(height: 8),
-              // Trainer assignment
               Row(
                 children: [
                   const Icon(Icons.person_outline, size: 16, color: AppColors.textTertiary),
@@ -214,7 +301,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Quick stats row
           Row(
             children: [
               _miniStat('Weight', '${member.currentWeight}kg', Icons.monitor_weight_outlined),
@@ -227,7 +313,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ],
           ),
           const SizedBox(height: 20),
-          // Goal progress
           if (member.goal != null) ...[
             Container(
               width: double.infinity,
@@ -242,7 +327,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 children: [
                   Text('Goal', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                   const SizedBox(height: 8),
-                  Text(member.goal!, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
+                  Text(_goalText.isNotEmpty ? _goalText : member.goal!, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
                   const SizedBox(height: 12),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(6),
@@ -260,7 +345,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ],
           const SizedBox(height: 16),
-          // Weight change card
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -288,7 +372,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ),
           const SizedBox(height: 16),
-          // Streak + Attendance summary
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -404,6 +487,54 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ),
           const SizedBox(height: 16),
+          // Show selected day attendance info
+          Builder(builder: (_) {
+            final key = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
+            final record = attendanceDates[key];
+            if (record != null) {
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.check_circle, color: AppColors.success, size: 24),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Present on ${DateFormat('MMM d, yyyy').format(_selectedDay)}', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+                        Text('Checked in at ${record.checkInTime}', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textSecondary)),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border, width: 0.5),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.cancel_outlined, color: AppColors.textTertiary, size: 24),
+                    const SizedBox(width: 12),
+                    Text('Absent on ${DateFormat('MMM d, yyyy').format(_selectedDay)}', style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textSecondary)),
+                  ],
+                ),
+              );
+            }
+          }),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -523,7 +654,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ),
           const SizedBox(height: 20),
-          // BMI trend
           Text('BMI Trend', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
           const SizedBox(height: 12),
           Container(
@@ -558,7 +688,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ),
           const SizedBox(height: 20),
-          // Add reading button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -568,7 +697,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ),
           const SizedBox(height: 16),
-          // Before/After placeholder
           Text('Before / After Photos', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
           const SizedBox(height: 12),
           Row(
@@ -584,21 +712,31 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   }
 
   Widget _photoSlot(String label) {
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 0.5),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.camera_alt_outlined, color: AppColors.textTertiary, size: 32),
-          const SizedBox(height: 8),
-          Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary)),
-          Text('Tap to add', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
-        ],
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Camera access not available in demo'),
+          backgroundColor: AppColors.surface,
+          behavior: SnackBarBehavior.floating,
+        ));
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        height: 160,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.border, width: 0.5),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.camera_alt_outlined, color: AppColors.textTertiary, size: 32),
+            const SizedBox(height: 8),
+            Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary)),
+            Text('Tap to add', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+          ],
+        ),
       ),
     );
   }
@@ -635,7 +773,20 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 ],
               ),
               const SizedBox(height: 20),
-              SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => Navigator.pop(ctx), child: const Text('Save Reading'))),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Reading saved'),
+                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  },
+                  child: const Text('Save Reading'),
+                ),
+              ),
             ],
           ),
         );
@@ -646,35 +797,50 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   // ===== WORKOUTS TAB =====
   Widget _buildWorkouts(Member member) {
     final workouts = getWorkoutsForMember(member.id);
-    final today = DateTime(now.year, now.month, now.day);
-    final todayWorkout = workouts[today];
+    final selectedDate = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
+    final dayWorkout = workouts[selectedDate];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Calendar bar (horizontal date picker)
           _buildCalendarBar(),
-          const SizedBox(height: 16),
-          if (todayWorkout != null && todayWorkout.isNotEmpty) ...[
-            Text(todayWorkout.first.title, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
-            if (todayWorkout.first.assignedBy != null)
-              Text('Assigned by ${todayWorkout.first.assignedBy}', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
+          const SizedBox(height: 8),
+          Text(DateFormat('EEEE, MMM d').format(_selectedDay), style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
+          const SizedBox(height: 12),
+          if (dayWorkout != null && dayWorkout.isNotEmpty) ...[
+            Text(dayWorkout.first.title, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+            if (dayWorkout.first.assignedBy != null)
+              Text('Assigned by ${dayWorkout.first.assignedBy}', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
             const SizedBox(height: 16),
-            ...todayWorkout.first.exercises.map((ex) => _exerciseCard(ex)),
+            ...dayWorkout.first.exercises.map((ex) => _exerciseCard(ex)),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(child: OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit, size: 16),
-                  label: const Text('Edit'),
+                  onPressed: () {
+                    setState(() => _workoutEditMode = !_workoutEditMode);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(_workoutEditMode ? 'Workout edit mode enabled' : 'Edit mode disabled'),
+                      backgroundColor: AppColors.accent,
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 1),
+                    ));
+                  },
+                  icon: Icon(_workoutEditMode ? Icons.check : Icons.edit, size: 16),
+                  label: Text(_workoutEditMode ? 'Done' : 'Edit'),
                   style: OutlinedButton.styleFrom(foregroundColor: AppColors.accent, side: const BorderSide(color: AppColors.accent)),
                 )),
                 const SizedBox(width: 12),
                 Expanded(child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("Previous day's workout copied"),
+                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  },
                   icon: const Icon(Icons.copy, size: 16),
                   label: const Text('Copy Previous'),
                   style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: const BorderSide(color: AppColors.border)),
@@ -685,14 +851,53 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () => _showSaveTemplateDialog(),
                 icon: const Icon(Icons.save_outlined, size: 16),
                 label: const Text('Save as Template'),
                 style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: const BorderSide(color: AppColors.border)),
               ),
             ),
           ] else
-            _emptyCard('No workout assigned for today', Icons.fitness_center_outlined),
+            _emptyCard('No workout assigned for ${DateFormat('MMM d').format(_selectedDay)}', Icons.fitness_center_outlined),
+        ],
+      ),
+    );
+  }
+
+  void _showSaveTemplateDialog() {
+    final nameCtrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text('Save as Template', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+        content: TextField(
+          controller: nameCtrl,
+          autofocus: true,
+          style: GoogleFonts.poppins(color: AppColors.textPrimary),
+          decoration: InputDecoration(
+            hintText: 'Template name',
+            hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('Cancel', style: GoogleFonts.poppins(color: AppColors.textSecondary)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              final name = nameCtrl.text.isNotEmpty ? nameCtrl.text : 'Untitled Template';
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Template "$name" saved'),
+                backgroundColor: AppColors.success,
+                behavior: SnackBarBehavior.floating,
+              ));
+            },
+            child: const Text('Save'),
+          ),
         ],
       ),
     );
@@ -733,6 +938,20 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               ),
             ),
             Text(ex.muscleGroup, style: GoogleFonts.poppins(fontSize: 10, color: AppColors.textTertiary)),
+            if (_workoutEditMode) ...[
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('${ex.name} removed'),
+                    backgroundColor: AppColors.danger,
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 1),
+                  ));
+                },
+                child: const Icon(Icons.delete_outline, color: AppColors.danger, size: 20),
+              ),
+            ],
           ],
         ),
       ),
@@ -742,8 +961,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   // ===== DIET PLAN TAB =====
   Widget _buildDietPlan(Member member) {
     final diets = getDietForMember(member.id);
-    final today = DateTime(now.year, now.month, now.day);
-    final todayDiet = diets[today];
+    final selectedDate = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
+    final dayDiet = diets[selectedDate];
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -751,9 +970,10 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCalendarBar(),
-          const SizedBox(height: 16),
-          if (todayDiet != null) ...[
-            // Macro summary
+          const SizedBox(height: 8),
+          Text(DateFormat('EEEE, MMM d').format(_selectedDay), style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
+          const SizedBox(height: 12),
+          if (dayDiet != null) ...[
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -770,34 +990,41 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _macroStat('Calories', '${todayDiet.targetCalories}', 'kcal', AppColors.accent),
-                      _macroStat('Protein', '${todayDiet.protein}', 'g', AppColors.success),
-                      _macroStat('Carbs', '${todayDiet.carbs}', 'g', AppColors.warning),
-                      _macroStat('Fat', '${todayDiet.fat}', 'g', AppColors.danger),
+                      _macroStat('Calories', '${dayDiet.targetCalories}', 'kcal', AppColors.accent),
+                      _macroStat('Protein', '${dayDiet.protein}', 'g', AppColors.success),
+                      _macroStat('Carbs', '${dayDiet.carbs}', 'g', AppColors.warning),
+                      _macroStat('Fat', '${dayDiet.fat}', 'g', AppColors.danger),
                     ],
                   ),
                 ],
               ),
             ),
-            if (todayDiet.assignedBy != null) ...[
+            if (dayDiet.assignedBy != null) ...[
               const SizedBox(height: 8),
-              Text('Assigned by ${todayDiet.assignedBy}', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
+              Text('Assigned by ${dayDiet.assignedBy}', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
             ],
             const SizedBox(height: 16),
-            // Meal cards
-            ...todayDiet.meals.map((meal) => _mealCard(meal)),
+            ...dayDiet.meals.map((meal) => _mealCard(meal)),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(child: OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit, size: 16),
-                  label: const Text('Edit'),
+                  onPressed: () {
+                    setState(() => _dietEditMode = !_dietEditMode);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(_dietEditMode ? 'Diet plan edit mode enabled' : 'Edit mode disabled'),
+                      backgroundColor: AppColors.accent,
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 1),
+                    ));
+                  },
+                  icon: Icon(_dietEditMode ? Icons.check : Icons.edit, size: 16),
+                  label: Text(_dietEditMode ? 'Done' : 'Edit'),
                   style: OutlinedButton.styleFrom(foregroundColor: AppColors.accent, side: const BorderSide(color: AppColors.accent)),
                 )),
                 const SizedBox(width: 12),
                 Expanded(child: OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () => _showApplyToOthersSheet(member),
                   icon: const Icon(Icons.people_outline, size: 16),
                   label: const Text('Apply to Others'),
                   style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: const BorderSide(color: AppColors.border)),
@@ -805,8 +1032,61 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               ],
             ),
           ] else
-            _emptyCard('No diet plan assigned for today', Icons.restaurant_outlined),
+            _emptyCard('No diet plan assigned for ${DateFormat('MMM d').format(_selectedDay)}', Icons.restaurant_outlined),
         ],
+      ),
+    );
+  }
+
+  void _showApplyToOthersSheet(Member currentMember) {
+    final gymId = ref.read(authProvider).selectedGym!.id;
+    final otherMembers = members.where((m) => m.gymId == gymId && m.id != currentMember.id).toList();
+    final selected = <String>{};
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
+              const SizedBox(height: 20),
+              Text('Apply Diet to Others', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+              const SizedBox(height: 16),
+              ...otherMembers.map((m) => CheckboxListTile(
+                value: selected.contains(m.id),
+                onChanged: (v) => setSheetState(() {
+                  if (v == true) selected.add(m.id); else selected.remove(m.id);
+                }),
+                title: Text(m.name, style: GoogleFonts.poppins(color: AppColors.textPrimary)),
+                subtitle: Text(m.plan, style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
+                activeColor: AppColors.accent,
+                checkColor: Colors.white,
+                controlAffinity: ListTileControlAffinity.leading,
+              )),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: selected.isEmpty ? null : () {
+                    Navigator.pop(ctx);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Diet plan applied to ${selected.length} member${selected.length > 1 ? 's' : ''}'),
+                      backgroundColor: AppColors.success,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  },
+                  child: Text('Apply to ${selected.length} Member${selected.length != 1 ? 's' : ''}'),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -888,7 +1168,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   ],
                 ),
                 const SizedBox(height: 16),
-                Text(member.goal ?? 'No goal set', style: GoogleFonts.poppins(fontSize: 15, color: AppColors.textSecondary)),
+                Text(_goalText.isNotEmpty ? _goalText : (member.goal ?? 'No goal set'), style: GoogleFonts.poppins(fontSize: 15, color: AppColors.textSecondary)),
                 const SizedBox(height: 16),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
@@ -905,7 +1185,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
             ),
           ),
           const SizedBox(height: 20),
-          // Owner notes
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -921,6 +1200,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 const SizedBox(height: 12),
                 TextField(
                   maxLines: 4,
+                  onChanged: (v) => _ownerNotes = v,
                   style: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 14),
                   decoration: InputDecoration(
                     hintText: 'Add notes about this member\'s progress...',
@@ -931,7 +1211,16 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 const SizedBox(height: 12),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: ElevatedButton(onPressed: () {}, child: const Text('Save Notes')),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Notes saved successfully'),
+                        backgroundColor: AppColors.success,
+                        behavior: SnackBarBehavior.floating,
+                      ));
+                    },
+                    child: const Text('Save Notes'),
+                  ),
                 ),
               ],
             ),
@@ -940,13 +1229,63 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
-              onPressed: () {},
+              onPressed: () => _showEditGoalSheet(member),
               icon: const Icon(Icons.edit),
               label: const Text('Edit Goal'),
               style: OutlinedButton.styleFrom(foregroundColor: AppColors.accent, side: const BorderSide(color: AppColors.accent)),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showEditGoalSheet(Member member) {
+    final goalCtrl = TextEditingController(text: _goalText.isNotEmpty ? _goalText : member.goal ?? '');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
+            const SizedBox(height: 20),
+            Text('Edit Goal', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: goalCtrl,
+              maxLines: 3,
+              autofocus: true,
+              style: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 14),
+              decoration: InputDecoration(
+                hintText: 'Enter member goal...',
+                hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() => _goalText = goalCtrl.text);
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Goal updated'),
+                    backgroundColor: AppColors.success,
+                    behavior: SnackBarBehavior.floating,
+                  ));
+                },
+                child: const Text('Save Goal'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -961,7 +1300,6 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Current plan card
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -1004,6 +1342,17 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               ],
             ),
           ),
+          if (isOverdue || daysLeft <= 7) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _showNotificationSheet(member),
+                icon: const Icon(Icons.notifications_active, size: 18),
+                label: const Text('Send Payment Reminder'),
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           Text('Payment History', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
           const SizedBox(height: 12),
