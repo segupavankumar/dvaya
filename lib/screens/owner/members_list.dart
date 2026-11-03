@@ -76,7 +76,7 @@ class MembersList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
               child: Row(
                 children: [
                   Text('Members', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
@@ -91,7 +91,7 @@ class MembersList extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextField(
                 onChanged: (v) => ref.read(memberSearchProvider.notifier).state = v,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
@@ -104,7 +104,7 @@ class MembersList extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -139,12 +139,12 @@ class MembersList extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: Text('${allMembers.length} members', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary)),
             ),
             Expanded(
               child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 80),
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 80),
                 itemCount: allMembers.length,
                 itemBuilder: (context, index) {
                   final member = allMembers[index];

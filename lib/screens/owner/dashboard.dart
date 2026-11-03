@@ -29,7 +29,7 @@ class OwnerDashboard extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -483,7 +483,7 @@ class OwnerDashboard extends ConsumerWidget {
         itemBuilder: (context, index) {
           final activity = recentActivities[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Row(
               children: [
                 Text(activity.icon, style: const TextStyle(fontSize: 20)),
