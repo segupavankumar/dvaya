@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
+import '../../data/models.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
 
@@ -91,7 +92,7 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
     return Text(title, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary));
   }
 
-  Widget _buildProfileSection(gym) {
+  Widget _buildProfileSection(Gym gym) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -137,7 +138,7 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
     );
   }
 
-  Widget _buildBannersSection(gym) {
+  Widget _buildBannersSection(Gym gym) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -155,7 +156,7 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
                 Switch(
                   value: _bannerToggles[banner] ?? true,
                   onChanged: (v) => setState(() => _bannerToggles[banner] = v),
-                  activeColor: AppColors.accent,
+                  activeThumbColor: AppColors.accent,
                 ),
               ],
             ),
@@ -193,7 +194,7 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
                 Switch(
                   value: entry.value,
                   onChanged: (_) => ref.read(dashboardConfigProvider.notifier).toggle(entry.key),
-                  activeColor: AppColors.accent,
+                  activeThumbColor: AppColors.accent,
                 ),
               ],
             ),

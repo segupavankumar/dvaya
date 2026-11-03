@@ -318,7 +318,7 @@ class _SoloDietState extends State<SoloDiet> {
               Text('Add Food Item', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: mealLabel,
+                initialValue: mealLabel,
                 dropdownColor: AppColors.surfaceElevated,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
                 decoration: InputDecoration(labelText: 'Meal', labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary)),

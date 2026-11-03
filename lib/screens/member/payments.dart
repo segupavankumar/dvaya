@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
-import '../../data/dummy_data.dart';
 import '../../data/models.dart';
 
 class MemberPayments extends ConsumerWidget {

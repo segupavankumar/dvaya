@@ -43,7 +43,7 @@ class _ExerciseEditorState extends State<ExerciseEditor> {
           Text('Add Exercise', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: _muscleGroup,
+            initialValue: _muscleGroup,
             dropdownColor: AppColors.surfaceElevated,
             style: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 14),
             decoration: InputDecoration(labelText: 'Muscle Group', labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary)),
