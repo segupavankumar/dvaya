@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
+import '../../providers/settings_provider.dart';
 import '../../widgets/streak_card.dart';
 
-class SoloHome extends StatelessWidget {
+class SoloHome extends ConsumerWidget {
   const SoloHome({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final today = DateTime.now();
     final todayKey = DateTime(today.year, today.month, today.day);
     final workouts = getSoloWorkouts();
     final todayWorkout = workouts[todayKey]?.firstOrNull;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -33,7 +36,6 @@ class SoloHome extends StatelessWidget {
               ),
               const SizedBox(height: 24),
 
-              // Quick action cards
               GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
@@ -42,78 +44,81 @@ class SoloHome extends StatelessWidget {
                 crossAxisSpacing: 12,
                 childAspectRatio: 1.6,
                 children: [
-                  _quickAction(context, Icons.fitness_center, 'Log Workout', AppColors.accent),
-                  _quickAction(context, Icons.trending_up, 'My Progress', AppColors.success),
-                  _quickAction(context, Icons.restaurant_menu, 'Diet Log', AppColors.warning),
-                  _quickAction(context, Icons.monitor_weight_outlined, 'Check Weight', Colors.blueAccent),
+                  _quickAction(ref, Icons.fitness_center, 'Log Workout', AppColors.accent, 1),
+                  _quickAction(ref, Icons.trending_up, 'My Progress', AppColors.success, 3),
+                  _quickAction(ref, Icons.restaurant_menu, 'Diet Log', AppColors.warning, 2),
+                  _quickAction(ref, Icons.monitor_weight_outlined, 'Check Weight', Colors.blueAccent, 3),
                 ],
               ),
               const SizedBox(height: 24),
 
-              // Today's workout preview
               if (todayWorkout != null) ...[
                 Text('Today\'s Workout', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                 const SizedBox(height: 12),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border, width: 0.5),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.accent.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(todayWorkout.title, style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.accent)),
-                          ),
-                          const Spacer(),
-                          Text('${todayWorkout.exercises.length} exercises', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      ...todayWorkout.exercises.take(3).map((e) => Padding(
-                        padding: const EdgeInsets.only(bottom: 6),
-                        child: Row(
+                InkWell(
+                  onTap: () => ref.read(soloTabProvider.notifier).state = 1,
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border, width: 0.5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            const Icon(Icons.circle, size: 6, color: AppColors.textTertiary),
-                            const SizedBox(width: 8),
-                            Text(e.name, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textPrimary)),
-                            const Spacer(),
-                            Text(
-                              '${e.sets}x${e.reps}${e.weight != null ? ' @ ${e.weight!.toStringAsFixed(0)}kg' : ''}',
-                              style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textSecondary, fontFeatures: const [FontFeature.tabularFigures()]),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.accent.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(todayWorkout.title, style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.accent)),
                             ),
+                            const Spacer(),
+                            Text('${todayWorkout.exercises.length} exercises', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
+                            const SizedBox(width: 4),
+                            const Icon(Icons.chevron_right, size: 18, color: AppColors.textTertiary),
                           ],
                         ),
-                      )),
-                      if (todayWorkout.exercises.length > 3)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Text('+${todayWorkout.exercises.length - 3} more', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.accent)),
-                        ),
-                    ],
+                        const SizedBox(height: 12),
+                        ...todayWorkout.exercises.take(3).map((e) => Padding(
+                          padding: const EdgeInsets.only(bottom: 6),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.circle, size: 6, color: AppColors.textTertiary),
+                              const SizedBox(width: 8),
+                              Text(e.name, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textPrimary)),
+                              const Spacer(),
+                              Text(
+                                '${e.sets}x${e.reps}${e.weight != null ? ' @ ${e.weight!.toStringAsFixed(0)}kg' : ''}',
+                                style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textSecondary, fontFeatures: const [FontFeature.tabularFigures()]),
+                              ),
+                            ],
+                          ),
+                        )),
+                        if (todayWorkout.exercises.length > 3)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text('+${todayWorkout.exercises.length - 3} more', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.accent)),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
               ],
 
-              // Streak
               StreakCard(
                 streak: soloUser.streak,
                 weekDots: const [true, true, false, true, true, true, true],
               ),
               const SizedBox(height: 24),
 
-              // Motivational stat
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -150,9 +155,9 @@ class SoloHome extends StatelessWidget {
     );
   }
 
-  Widget _quickAction(BuildContext context, IconData icon, String label, Color color) {
+  Widget _quickAction(WidgetRef ref, IconData icon, String label, Color color, int tabIndex) {
     return InkWell(
-      onTap: () {},
+      onTap: () => ref.read(soloTabProvider.notifier).state = tabIndex,
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(14),

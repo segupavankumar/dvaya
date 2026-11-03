@@ -227,7 +227,13 @@ class _SoloDietState extends State<SoloDiet> {
                     Text('${meal.totalCalories} cal', style: GoogleFonts.poppins(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.accent)),
                     const SizedBox(width: 8),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Editing ${meal.label}...'),
+                          backgroundColor: AppColors.surface,
+                        ));
+                        _showAddMealSheet();
+                      },
                       child: const Icon(Icons.edit_outlined, size: 16, color: AppColors.textTertiary),
                     ),
                   ],

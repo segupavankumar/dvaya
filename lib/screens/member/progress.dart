@@ -34,7 +34,7 @@ class MemberProgress extends ConsumerWidget {
             const SizedBox(height: 20),
             _buildGoalCard(context, member),
             const SizedBox(height: 20),
-            _buildPhotoSlots(),
+            _buildPhotoSlots(context),
             const SizedBox(height: 20),
             _buildAttendanceSection(member, weekDots),
             const SizedBox(height: 16),
@@ -187,24 +187,34 @@ class MemberProgress extends ConsumerWidget {
     );
   }
 
-  Widget _buildPhotoSlots() {
+  Widget _buildPhotoSlots(BuildContext context) {
     return Row(
       children: ['Before', 'After'].map((label) => Expanded(
-        child: Container(
-          margin: EdgeInsets.only(right: label == 'Before' ? 6 : 0, left: label == 'After' ? 6 : 0),
-          height: 160,
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border, width: 0.5),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.add_a_photo_outlined, color: AppColors.textTertiary, size: 32),
-              const SizedBox(height: 8),
-              Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
-            ],
+        child: InkWell(
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Camera will open here in production'),
+              backgroundColor: AppColors.surface,
+            ));
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            margin: EdgeInsets.only(right: label == 'Before' ? 6 : 0, left: label == 'After' ? 6 : 0),
+            height: 160,
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.border, width: 0.5),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add_a_photo_outlined, color: AppColors.textTertiary, size: 32),
+                const SizedBox(height: 8),
+                Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
+                Text('Tap to add', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+              ],
+            ),
           ),
         ),
       )).toList(),

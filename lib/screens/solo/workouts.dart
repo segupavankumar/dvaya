@@ -116,7 +116,30 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
                         const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
-                          onPressed: () {},
+                          onPressed: () {
+                            final ctrl = TextEditingController(text: workout.title);
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: AppColors.surface,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                              builder: (ctx) => Padding(
+                                padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Center(child: Container(width: 40, height: 4, decoration: BoxDecoration(color: AppColors.textTertiary, borderRadius: BorderRadius.circular(2)))),
+                                    const SizedBox(height: 16),
+                                    Text('Rename Workout', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                                    const SizedBox(height: 16),
+                                    TextField(controller: ctrl, style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(labelText: 'Workout Name', labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary))),
+                                    const SizedBox(height: 20),
+                                    SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () { Navigator.pop(ctx); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Renamed to "${ctrl.text}"'), backgroundColor: AppColors.surface)); }, child: const Text('Save'))),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -198,7 +221,13 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.textTertiary),
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('${ex.name} removed'),
+                backgroundColor: AppColors.surface,
+                action: SnackBarAction(label: 'Undo', textColor: AppColors.accent, onPressed: () {}),
+              ));
+            },
           ),
         ],
       ),
