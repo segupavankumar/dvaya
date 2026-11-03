@@ -82,7 +82,7 @@ class SoloHome extends ConsumerWidget {
                             const Spacer(),
                             Text('${todayWorkout.exercises.length} exercises', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
                             const SizedBox(width: 4),
-                            const Icon(Icons.chevron_right, size: 18, color: AppColors.textTertiary),
+                            Icon(Icons.chevron_right, size: 18, color: AppColors.textTertiary),
                           ],
                         ),
                         const SizedBox(height: 12),
@@ -90,7 +90,7 @@ class SoloHome extends ConsumerWidget {
                           padding: const EdgeInsets.only(bottom: 6),
                           child: Row(
                             children: [
-                              const Icon(Icons.circle, size: 6, color: AppColors.textTertiary),
+                              Icon(Icons.circle, size: 6, color: AppColors.textTertiary),
                               const SizedBox(width: 8),
                               Text(e.name, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textPrimary)),
                               const Spacer(),

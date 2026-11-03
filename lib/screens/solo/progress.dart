@@ -130,7 +130,7 @@ class _SoloProgressState extends State<SoloProgress> {
                     children: [
                       Expanded(child: Text(_goal, style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textPrimary))),
                       IconButton(
-                        icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.textSecondary),
+                        icon: Icon(Icons.edit_outlined, size: 18, color: AppColors.textSecondary),
                         onPressed: _showEditGoalSheet,
                       ),
                     ],
@@ -219,7 +219,7 @@ class _SoloProgressState extends State<SoloProgress> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.add_a_photo_outlined, color: AppColors.textTertiary, size: 32),
+            Icon(Icons.add_a_photo_outlined, color: AppColors.textTertiary, size: 32),
             const SizedBox(height: 8),
             Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary)),
             Text('Tap to add', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),

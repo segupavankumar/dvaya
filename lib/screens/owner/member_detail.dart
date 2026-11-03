@@ -56,7 +56,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               expandedHeight: 200,
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
+                  icon: Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
                   onPressed: () => _showNotificationSheet(member),
                   tooltip: 'Send Notification',
                 ),
@@ -152,7 +152,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 decoration: InputDecoration(
                   hintText: 'Custom message (optional)',
                   hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.border)),
                 ),
               ),
               const SizedBox(height: 20),
@@ -207,7 +207,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(Icons.person_outline, size: 16, color: AppColors.textTertiary),
+                  Icon(Icons.person_outline, size: 16, color: AppColors.textTertiary),
                   const SizedBox(width: 4),
                   if (_assignedTrainer != null)
                     Text(_assignedTrainer!, style: GoogleFonts.poppins(fontSize: 12, color: AppColors.accent))
@@ -220,7 +220,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                     const SizedBox(width: 8),
                     InkWell(
                       onTap: () => _showTrainerPicker(gym),
-                      child: const Icon(Icons.edit, size: 14, color: AppColors.textTertiary),
+                      child: Icon(Icons.edit, size: 14, color: AppColors.textTertiary),
                     ),
                   ],
                 ],
@@ -263,7 +263,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               ListTile(
                 leading: CircleAvatar(
                   backgroundColor: AppColors.surfaceElevated,
-                  child: const Icon(Icons.close, color: AppColors.textTertiary),
+                  child: Icon(Icons.close, color: AppColors.textTertiary),
                 ),
                 title: Text('No trainer', style: GoogleFonts.poppins(color: AppColors.textSecondary)),
                 onTap: () {
@@ -362,9 +362,9 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _journeyStat('Start', '${member.startWeight}kg'),
-                    const Icon(Icons.arrow_forward, color: AppColors.textTertiary),
+                    Icon(Icons.arrow_forward, color: AppColors.textTertiary),
                     _journeyStat('Current', '${member.currentWeight}kg'),
-                    const Icon(Icons.arrow_forward, color: AppColors.textTertiary),
+                    Icon(Icons.arrow_forward, color: AppColors.textTertiary),
                     _journeyStat('Change', '${(member.currentWeight - member.startWeight).toStringAsFixed(1)}kg'),
                   ],
                 ),
@@ -390,13 +390,13 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   Text('Day Streak', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
                 ]),
                 Column(children: [
-                  const Icon(Icons.calendar_today_outlined, color: AppColors.textSecondary, size: 28),
+                  Icon(Icons.calendar_today_outlined, color: AppColors.textSecondary, size: 28),
                   const SizedBox(height: 4),
                   Text('${member.attendance.length}', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
                   Text('Total Visits', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
                 ]),
                 Column(children: [
-                  const Icon(Icons.timer_outlined, color: AppColors.textSecondary, size: 28),
+                  Icon(Icons.timer_outlined, color: AppColors.textSecondary, size: 28),
                   const SizedBox(height: 4),
                   Text('${DateTime.now().difference(member.joinDate).inDays}', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
                   Text('Days Active', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
@@ -477,8 +477,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               headerStyle: HeaderStyle(
                 formatButtonVisible: false,
                 titleTextStyle: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-                leftChevronIcon: const Icon(Icons.chevron_left, color: AppColors.textSecondary),
-                rightChevronIcon: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+                leftChevronIcon: Icon(Icons.chevron_left, color: AppColors.textSecondary),
+                rightChevronIcon: Icon(Icons.chevron_right, color: AppColors.textSecondary),
               ),
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary),
@@ -527,7 +527,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.cancel_outlined, color: AppColors.textTertiary, size: 24),
+                    Icon(Icons.cancel_outlined, color: AppColors.textTertiary, size: 24),
                     const SizedBox(width: 12),
                     Text('Absent on ${DateFormat('MMM d, yyyy').format(_selectedDay)}', style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textSecondary)),
                   ],
@@ -731,7 +731,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.camera_alt_outlined, color: AppColors.textTertiary, size: 32),
+            Icon(Icons.camera_alt_outlined, color: AppColors.textTertiary, size: 32),
             const SizedBox(height: 8),
             Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary)),
             Text('Tap to add', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
@@ -759,17 +759,17 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               const SizedBox(height: 16),
               Row(
                 children: [
-                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: const InputDecoration(hintText: 'Weight (kg)'), keyboardType: TextInputType.number)),
+                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(hintText: 'Weight (kg)'), keyboardType: TextInputType.number)),
                   const SizedBox(width: 12),
-                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: const InputDecoration(hintText: 'Fat %'), keyboardType: TextInputType.number)),
+                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(hintText: 'Fat %'), keyboardType: TextInputType.number)),
                 ],
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: const InputDecoration(hintText: 'BMI'), keyboardType: TextInputType.number)),
+                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(hintText: 'BMI'), keyboardType: TextInputType.number)),
                   const SizedBox(width: 12),
-                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: const InputDecoration(hintText: 'Muscle %'), keyboardType: TextInputType.number)),
+                  Expanded(child: TextField(style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(hintText: 'Muscle %'), keyboardType: TextInputType.number)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -843,7 +843,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   },
                   icon: const Icon(Icons.copy, size: 16),
                   label: const Text('Copy Previous'),
-                  style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: const BorderSide(color: AppColors.border)),
+                  style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: BorderSide(color: AppColors.border)),
                 )),
               ],
             ),
@@ -854,7 +854,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 onPressed: () => _showSaveTemplateDialog(),
                 icon: const Icon(Icons.save_outlined, size: 16),
                 label: const Text('Save as Template'),
-                style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: const BorderSide(color: AppColors.border)),
+                style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: BorderSide(color: AppColors.border)),
               ),
             ),
           ] else
@@ -1027,7 +1027,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   onPressed: () => _showApplyToOthersSheet(member),
                   icon: const Icon(Icons.people_outline, size: 16),
                   label: const Text('Apply to Others'),
-                  style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: const BorderSide(color: AppColors.border)),
+                  style: OutlinedButton.styleFrom(foregroundColor: AppColors.textSecondary, side: BorderSide(color: AppColors.border)),
                 )),
               ],
             ),
@@ -1127,7 +1127,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               padding: const EdgeInsets.only(bottom: 4),
               child: Row(
                 children: [
-                  const Icon(Icons.circle, size: 6, color: AppColors.textTertiary),
+                  Icon(Icons.circle, size: 6, color: AppColors.textTertiary),
                   const SizedBox(width: 8),
                   Expanded(child: Text(item.name, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textSecondary))),
                   Text(item.quantity, style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
@@ -1205,7 +1205,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                   decoration: InputDecoration(
                     hintText: 'Add notes about this member\'s progress...',
                     hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.border)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -1265,7 +1265,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
               decoration: InputDecoration(
                 hintText: 'Enter member goal...',
                 hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.border)),
               ),
             ),
             const SizedBox(height: 20),

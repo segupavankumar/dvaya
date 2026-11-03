@@ -50,12 +50,12 @@ class OwnerDashboard extends ConsumerWidget {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
+                    icon: Icon(Icons.notifications_outlined, color: AppColors.textSecondary),
                     onPressed: () => _showNotificationsSheet(context),
                     tooltip: 'Notifications',
                   ),
                   IconButton(
-                    icon: const Icon(Icons.settings_outlined, color: AppColors.textSecondary),
+                    icon: Icon(Icons.settings_outlined, color: AppColors.textSecondary),
                     onPressed: () => ref.read(ownerTabProvider.notifier).state = 2,
                     tooltip: 'Settings',
                   ),
@@ -103,7 +103,7 @@ class OwnerDashboard extends ConsumerWidget {
                   ),
                   child: Column(
                     children: [
-                      const Icon(Icons.dashboard_customize_outlined, size: 48, color: AppColors.textTertiary),
+                      Icon(Icons.dashboard_customize_outlined, size: 48, color: AppColors.textTertiary),
                       const SizedBox(height: 12),
                       Text('No cards visible', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
                       const SizedBox(height: 4),
@@ -479,7 +479,7 @@ class OwnerDashboard extends ConsumerWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: recentActivities.length,
-        separatorBuilder: (_, __) => const Divider(color: AppColors.border, height: 1),
+        separatorBuilder: (_, __) => Divider(color: AppColors.border, height: 1),
         itemBuilder: (context, index) {
           final activity = recentActivities[index];
           return Padding(

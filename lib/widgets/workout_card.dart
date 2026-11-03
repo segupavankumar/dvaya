@@ -57,7 +57,7 @@ class WorkoutCard extends StatelessWidget {
                   value: exercise.completed,
                   onChanged: (v) => setState(() => exercise.completed = v ?? false),
                   activeColor: AppColors.accent,
-                  side: const BorderSide(color: AppColors.textTertiary),
+                  side: BorderSide(color: AppColors.textTertiary),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
               ),

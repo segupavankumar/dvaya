@@ -7,11 +7,35 @@ import '../../providers/auth_provider.dart';
 import '../../data/dummy_data.dart';
 import '../../data/models.dart';
 
-class MemberProgress extends ConsumerWidget {
+class MemberProgress extends ConsumerStatefulWidget {
   const MemberProgress({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MemberProgress> createState() => _MemberProgressState();
+}
+
+class _MemberProgressState extends ConsumerState<MemberProgress> {
+  late double _weight;
+  late double _bmi;
+  late double _fat;
+  late double _muscle;
+  late String _goal;
+  late double _goalProgress;
+
+  @override
+  void initState() {
+    super.initState();
+    final member = ref.read(authProvider).selectedMember!;
+    _weight = member.currentWeight;
+    _bmi = member.bmi;
+    _fat = member.fatPercent;
+    _muscle = member.musclePercent;
+    _goal = member.goal ?? 'No goal set';
+    _goalProgress = member.goalProgress;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
     final member = auth.selectedMember!;
     final today = DateTime(now.year, now.month, now.day);
@@ -28,20 +52,20 @@ class MemberProgress extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildMetricsGrid(member),
+            _buildMetricsGrid(),
             const SizedBox(height: 20),
             _buildWeightChart(member),
             const SizedBox(height: 20),
-            _buildGoalCard(context, member),
+            _buildGoalCard(),
             const SizedBox(height: 20),
-            _buildPhotoSlots(context),
+            _buildPhotoSlots(),
             const SizedBox(height: 20),
             _buildAttendanceSection(member, weekDots),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () => _showUpdateMetrics(context, member),
+                onPressed: _showUpdateMetrics,
                 icon: const Icon(Icons.edit, size: 18),
                 label: const Text('Update Metrics'),
               ),
@@ -53,12 +77,12 @@ class MemberProgress extends ConsumerWidget {
     );
   }
 
-  Widget _buildMetricsGrid(Member member) {
+  Widget _buildMetricsGrid() {
     final metrics = [
-      ('Weight', '${member.currentWeight}kg', Icons.monitor_weight_outlined, AppColors.accent),
-      ('BMI', '${member.bmi}', Icons.speed_outlined, AppColors.warning),
-      ('Body Fat', '${member.fatPercent}%', Icons.water_drop_outlined, AppColors.danger),
-      ('Muscle', '${member.musclePercent}%', Icons.fitness_center, AppColors.success),
+      ('Weight', '${_weight.toStringAsFixed(1)}kg', Icons.monitor_weight_outlined, AppColors.accent),
+      ('BMI', _bmi.toStringAsFixed(1), Icons.speed_outlined, AppColors.warning),
+      ('Body Fat', '${_fat.toStringAsFixed(1)}%', Icons.water_drop_outlined, AppColors.danger),
+      ('Muscle', '${_muscle.toStringAsFixed(1)}%', Icons.fitness_center, AppColors.success),
     ];
     return GridView.count(
       crossAxisCount: 2,
@@ -139,7 +163,7 @@ class MemberProgress extends ConsumerWidget {
     );
   }
 
-  Widget _buildGoalCard(BuildContext context, Member member) {
+  Widget _buildGoalCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -156,7 +180,7 @@ class MemberProgress extends ConsumerWidget {
               Text('My Goal', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
               const Spacer(),
               GestureDetector(
-                onTap: () => _showEditGoal(context, member),
+                onTap: _showEditGoal,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
@@ -169,25 +193,25 @@ class MemberProgress extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(member.goal ?? 'No goal set', style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textSecondary)),
+          Text(_goal, style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textSecondary)),
           const SizedBox(height: 14),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
-              value: member.goalProgress,
+              value: _goalProgress,
               backgroundColor: AppColors.surfaceElevated,
               valueColor: const AlwaysStoppedAnimation(AppColors.accent),
               minHeight: 8,
             ),
           ),
           const SizedBox(height: 6),
-          Text('${(member.goalProgress * 100).toInt()}% complete', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
+          Text('${(_goalProgress * 100).toInt()}% complete', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
         ],
       ),
     );
   }
 
-  Widget _buildPhotoSlots(BuildContext context) {
+  Widget _buildPhotoSlots() {
     return Row(
       children: ['Before', 'After'].map((label) => Expanded(
         child: InkWell(
@@ -276,8 +300,8 @@ class MemberProgress extends ConsumerWidget {
     );
   }
 
-  void _showEditGoal(BuildContext context, Member member) {
-    final controller = TextEditingController(text: member.goal);
+  void _showEditGoal() {
+    final controller = TextEditingController(text: _goal);
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surface,
@@ -296,17 +320,31 @@ class MemberProgress extends ConsumerWidget {
               controller: controller,
               maxLines: 3,
               style: GoogleFonts.poppins(color: AppColors.textPrimary),
-              decoration: const InputDecoration(hintText: 'What is your fitness goal?'),
+              decoration: InputDecoration(hintText: 'What is your fitness goal?'),
             ),
             const SizedBox(height: 16),
-            SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => Navigator.pop(ctx), child: const Text('Save'))),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() => _goal = controller.text);
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Save'),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  void _showUpdateMetrics(BuildContext context, Member member) {
+  void _showUpdateMetrics() {
+    final weightCtrl = TextEditingController(text: _weight.toStringAsFixed(1));
+    final bmiCtrl = TextEditingController(text: _bmi.toStringAsFixed(1));
+    final fatCtrl = TextEditingController(text: _fat.toStringAsFixed(1));
+    final muscleCtrl = TextEditingController(text: _muscle.toStringAsFixed(1));
+
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surface,
@@ -321,27 +359,44 @@ class MemberProgress extends ConsumerWidget {
             const SizedBox(height: 20),
             Text('Update Metrics', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
             const SizedBox(height: 16),
-            _metricField('Weight (kg)', '${member.currentWeight}'),
+            Row(
+              children: [
+                Expanded(child: TextField(controller: weightCtrl, keyboardType: TextInputType.number, style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(labelText: 'Weight (kg)'))),
+                const SizedBox(width: 12),
+                Expanded(child: TextField(controller: bmiCtrl, keyboardType: TextInputType.number, style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(labelText: 'BMI'))),
+              ],
+            ),
             const SizedBox(height: 12),
-            _metricField('BMI', '${member.bmi}'),
-            const SizedBox(height: 12),
-            _metricField('Body Fat %', '${member.fatPercent}'),
-            const SizedBox(height: 12),
-            _metricField('Muscle %', '${member.musclePercent}'),
-            const SizedBox(height: 16),
-            SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => Navigator.pop(ctx), child: const Text('Save'))),
+            Row(
+              children: [
+                Expanded(child: TextField(controller: fatCtrl, keyboardType: TextInputType.number, style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(labelText: 'Body Fat %'))),
+                const SizedBox(width: 12),
+                Expanded(child: TextField(controller: muscleCtrl, keyboardType: TextInputType.number, style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(labelText: 'Muscle %'))),
+              ],
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _weight = double.tryParse(weightCtrl.text) ?? _weight;
+                    _bmi = double.tryParse(bmiCtrl.text) ?? _bmi;
+                    _fat = double.tryParse(fatCtrl.text) ?? _fat;
+                    _muscle = double.tryParse(muscleCtrl.text) ?? _muscle;
+                  });
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Metrics updated'),
+                    backgroundColor: AppColors.success,
+                  ));
+                },
+                child: const Text('Save'),
+              ),
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _metricField(String label, String value) {
-    return TextField(
-      controller: TextEditingController(text: value),
-      keyboardType: TextInputType.number,
-      style: GoogleFonts.poppins(color: AppColors.textPrimary),
-      decoration: InputDecoration(labelText: label, labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary)),
     );
   }
 }

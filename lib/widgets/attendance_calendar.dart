@@ -65,8 +65,8 @@ class _AttendanceCalendarState extends State<AttendanceCalendar> {
           formatButtonVisible: false,
           titleCentered: true,
           titleTextStyle: GoogleFonts.poppins(color: AppColors.textPrimary, fontSize: 16, fontWeight: FontWeight.w600),
-          leftChevronIcon: const Icon(Icons.chevron_left, color: AppColors.textSecondary),
-          rightChevronIcon: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+          leftChevronIcon: Icon(Icons.chevron_left, color: AppColors.textSecondary),
+          rightChevronIcon: Icon(Icons.chevron_right, color: AppColors.textSecondary),
         ),
         daysOfWeekStyle: DaysOfWeekStyle(
           weekdayStyle: GoogleFonts.poppins(color: AppColors.textTertiary, fontSize: 12),

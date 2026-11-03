@@ -26,7 +26,7 @@ class SoloShell extends ConsumerWidget {
     return Scaffold(
       body: IndexedStack(index: currentIndex, children: screens),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
         ),
         child: BottomNavigationBar(

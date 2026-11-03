@@ -58,6 +58,36 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
               const SizedBox(height: 12),
               _buildPlansSection(),
               const SizedBox(height: 24),
+              _sectionHeader('Appearance'),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.border, width: 0.5),
+                ),
+                child: Row(
+                  children: [
+                    Icon(ref.watch(themeModeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode, color: AppColors.accent, size: 22),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Dark Mode', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+                          Text(ref.watch(themeModeProvider) == ThemeMode.dark ? 'Currently dark' : 'Currently light', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: ref.watch(themeModeProvider) == ThemeMode.dark,
+                      onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
@@ -93,13 +123,13 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
       child: Column(
         children: [
           _profileField('Gym Name', gym.name, Icons.business),
-          const Divider(color: AppColors.border),
+          Divider(color: AppColors.border),
           _profileField('Address', gym.address, Icons.location_on_outlined),
-          const Divider(color: AppColors.border),
+          Divider(color: AppColors.border),
           _profileField('Phone', gym.phone, Icons.phone_outlined),
-          const Divider(color: AppColors.border),
+          Divider(color: AppColors.border),
           _profileField('Timings', gym.timings, Icons.access_time_outlined),
-          const Divider(color: AppColors.border),
+          Divider(color: AppColors.border),
           _profileField('Description', gym.description, Icons.description_outlined),
         ],
       ),
@@ -360,7 +390,7 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
                   ),
                   Text('₹${NumberFormat('#,##,###').format(plan.price.toInt())}', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.accent)),
                   const SizedBox(width: 8),
-                  const Icon(Icons.edit_outlined, size: 16, color: AppColors.textTertiary),
+                  Icon(Icons.edit_outlined, size: 16, color: AppColors.textTertiary),
                 ],
               ),
             ),

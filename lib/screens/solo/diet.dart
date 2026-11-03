@@ -166,7 +166,7 @@ class _SoloDietState extends State<SoloDiet> {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            const Icon(Icons.restaurant_menu, size: 48, color: AppColors.textTertiary),
+            Icon(Icons.restaurant_menu, size: 48, color: AppColors.textTertiary),
             const SizedBox(height: 12),
             Text('No meals logged', style: GoogleFonts.poppins(fontSize: 16, color: AppColors.textSecondary)),
             const SizedBox(height: 16),
@@ -234,7 +234,7 @@ class _SoloDietState extends State<SoloDiet> {
                         ));
                         _showAddMealSheet();
                       },
-                      child: const Icon(Icons.edit_outlined, size: 16, color: AppColors.textTertiary),
+                      child: Icon(Icons.edit_outlined, size: 16, color: AppColors.textTertiary),
                     ),
                   ],
                 ),
@@ -245,7 +245,7 @@ class _SoloDietState extends State<SoloDiet> {
               padding: const EdgeInsets.only(bottom: 4),
               child: Row(
                 children: [
-                  const Icon(Icons.circle, size: 5, color: AppColors.textTertiary),
+                  Icon(Icons.circle, size: 5, color: AppColors.textTertiary),
                   const SizedBox(width: 8),
                   Expanded(child: Text('${item.name} (${item.quantity})', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textSecondary))),
                   Text('${item.calories} cal', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary, fontFeatures: const [FontFeature.tabularFigures()])),
@@ -294,7 +294,7 @@ class _SoloDietState extends State<SoloDiet> {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.textTertiary, size: 20),
+            Icon(Icons.chevron_right, color: AppColors.textTertiary, size: 20),
           ],
         ),
       ),

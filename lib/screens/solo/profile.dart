@@ -55,6 +55,35 @@ class SoloProfile extends ConsumerWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border, width: 0.5),
+              ),
+              child: Row(
+                children: [
+                  Icon(ref.watch(themeModeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode, color: AppColors.accent, size: 22),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Dark Mode', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+                        Text(ref.watch(themeModeProvider) == ThemeMode.dark ? 'Currently dark' : 'Currently light', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+                      ],
+                    ),
+                  ),
+                  Switch(
+                    value: ref.watch(themeModeProvider) == ThemeMode.dark,
+                    onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light,
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 12),
 
             // Join a gym
@@ -167,7 +196,7 @@ class SoloProfile extends ConsumerWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(ctx);
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Profile updated'), backgroundColor: AppColors.surface));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile updated'), backgroundColor: AppColors.surface));
                 },
                 child: const Text('Save'),
               ),

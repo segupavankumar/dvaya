@@ -97,7 +97,7 @@ class MembersList extends ConsumerWidget {
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
                 decoration: InputDecoration(
                   hintText: 'Search members...',
-                  prefixIcon: const Icon(Icons.search, color: AppColors.textTertiary),
+                  prefixIcon: Icon(Icons.search, color: AppColors.textTertiary),
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
@@ -226,7 +226,7 @@ class MembersList extends ConsumerWidget {
                 decoration: InputDecoration(
                   hintText: 'Custom message (optional)...',
                   hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.border)),
                 ),
               ),
               const SizedBox(height: 16),
@@ -308,7 +308,7 @@ class MembersList extends ConsumerWidget {
                 decoration: InputDecoration(
                   hintText: 'Type your message...',
                   hintStyle: GoogleFonts.poppins(color: AppColors.textTertiary),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: AppColors.border)),
                 ),
               ),
               const SizedBox(height: 16),
@@ -358,20 +358,20 @@ class MembersList extends ConsumerWidget {
               TextField(
                 controller: nameCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outline, color: AppColors.textTertiary)),
+                decoration: InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outline, color: AppColors.textTertiary)),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: phoneCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined, color: AppColors.textTertiary)),
+                decoration: InputDecoration(hintText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined, color: AppColors.textTertiary)),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: emailCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Email', prefixIcon: Icon(Icons.email_outlined, color: AppColors.textTertiary)),
+                decoration: InputDecoration(hintText: 'Email', prefixIcon: Icon(Icons.email_outlined, color: AppColors.textTertiary)),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 20),

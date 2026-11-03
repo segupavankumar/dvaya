@@ -18,10 +18,16 @@ class DvayaApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
+    final themeMode = ref.watch(themeModeProvider);
+
+    AppColors.updateBrightness(themeMode == ThemeMode.dark);
+
     return MaterialApp(
       title: 'Dvaya',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
       home: _buildHome(auth),
     );
   }

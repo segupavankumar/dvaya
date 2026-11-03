@@ -69,7 +69,7 @@ class MemberCard extends StatelessWidget {
                 constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                 padding: EdgeInsets.zero,
               ),
-            const Icon(Icons.chevron_right, color: AppColors.textTertiary),
+            Icon(Icons.chevron_right, color: AppColors.textTertiary),
           ],
         ),
       ),

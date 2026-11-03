@@ -30,7 +30,7 @@ class OwnerShell extends ConsumerWidget {
               child: const Icon(Icons.person_add, color: Colors.white),
             ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
         ),
         child: BottomNavigationBar(
@@ -88,20 +88,20 @@ class OwnerShell extends ConsumerWidget {
               TextField(
                 controller: nameCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outline, color: AppColors.textTertiary)),
+                decoration: InputDecoration(hintText: 'Full Name', prefixIcon: Icon(Icons.person_outline, color: AppColors.textTertiary)),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: phoneCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined, color: AppColors.textTertiary)),
+                decoration: InputDecoration(hintText: 'Phone Number', prefixIcon: Icon(Icons.phone_outlined, color: AppColors.textTertiary)),
                 keyboardType: TextInputType.phone,
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: emailCtrl,
                 style: GoogleFonts.poppins(color: AppColors.textPrimary),
-                decoration: const InputDecoration(hintText: 'Email', prefixIcon: Icon(Icons.email_outlined, color: AppColors.textTertiary)),
+                decoration: InputDecoration(hintText: 'Email', prefixIcon: Icon(Icons.email_outlined, color: AppColors.textTertiary)),
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 12),
@@ -112,7 +112,7 @@ class OwnerShell extends ConsumerWidget {
                 decoration: InputDecoration(
                   labelText: 'Plan',
                   labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary),
-                  prefixIcon: const Icon(Icons.card_membership, color: AppColors.textTertiary),
+                  prefixIcon: Icon(Icons.card_membership, color: AppColors.textTertiary),
                 ),
                 items: ['Monthly - ₹1,500', 'Quarterly - ₹4,000', 'Annual - ₹12,000']
                     .map((p) => DropdownMenuItem(value: p.split(' - ').first, child: Text(p)))

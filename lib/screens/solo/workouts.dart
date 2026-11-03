@@ -115,7 +115,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
                         Text(workout.title, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
                         const Spacer(),
                         IconButton(
-                          icon: const Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
+                          icon: Icon(Icons.edit_outlined, size: 20, color: AppColors.textSecondary),
                           onPressed: () {
                             final ctrl = TextEditingController(text: workout.title);
                             showModalBottomSheet(
@@ -134,7 +134,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
                                     const SizedBox(height: 16),
                                     TextField(controller: ctrl, style: GoogleFonts.poppins(color: AppColors.textPrimary), decoration: InputDecoration(labelText: 'Workout Name', labelStyle: GoogleFonts.poppins(color: AppColors.textSecondary))),
                                     const SizedBox(height: 20),
-                                    SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () { Navigator.pop(ctx); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Renamed to "${ctrl.text}"'), backgroundColor: AppColors.surface)); }, child: const Text('Save'))),
+                                    SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () { Navigator.pop(ctx); ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Renamed to "${ctrl.text}"'), backgroundColor: AppColors.surface)); }, child: Text('Save'))),
                                   ],
                                 ),
                               ),
@@ -199,7 +199,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
             value: ex.completed,
             onChanged: (v) => setState(() => ex.completed = v ?? false),
             activeColor: AppColors.accent,
-            side: const BorderSide(color: AppColors.textTertiary),
+            side: BorderSide(color: AppColors.textTertiary),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           ),
           Expanded(
@@ -220,7 +220,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, size: 18, color: AppColors.textTertiary),
+            icon: Icon(Icons.delete_outline, size: 18, color: AppColors.textTertiary),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('${ex.name} removed'),
@@ -270,7 +270,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.textTertiary, size: 20),
+            Icon(Icons.chevron_right, color: AppColors.textTertiary, size: 20),
           ],
         ),
       ),
