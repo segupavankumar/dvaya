@@ -184,9 +184,9 @@ class _MemberHomeState extends ConsumerState<MemberHome> {
   Widget _buildBannerCarousel(List<String> banners) {
     final icons = [Icons.local_offer, Icons.emoji_events, Icons.star, Icons.campaign];
     final gradients = [
-      [AppColors.accent.withValues(alpha: 0.25), AppColors.accent.withValues(alpha: 0.08)],
-      [AppColors.success.withValues(alpha: 0.2), AppColors.success.withValues(alpha: 0.06)],
-      [AppColors.warning.withValues(alpha: 0.2), AppColors.warning.withValues(alpha: 0.06)],
+      [AppColors.accent.withValues(alpha: 0.25), AppColors.accent.withValues(alpha: 0.12)],
+      [AppColors.success.withValues(alpha: 0.2), AppColors.success.withValues(alpha: 0.1)],
+      [AppColors.warning.withValues(alpha: 0.2), AppColors.warning.withValues(alpha: 0.1)],
     ];
 
     return Column(

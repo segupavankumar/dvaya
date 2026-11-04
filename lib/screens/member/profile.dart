@@ -4,7 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../data/dummy_data.dart';
+import '../../data/models.dart';
 import 'payments.dart';
+import 'coach_profile_view.dart';
 import '../../widgets/responsive.dart';
 
 class MemberProfile extends ConsumerWidget {
@@ -39,7 +42,7 @@ class MemberProfile extends ConsumerWidget {
               _infoRow(Icons.emergency_outlined, 'Emergency', member.emergencyContact),
               _infoRow(Icons.calendar_today_outlined, 'Member Since', DateFormat('d MMM yyyy').format(member.joinDate)),
               if (member.trainer != null)
-                _infoRow(Icons.person_outline, 'Trainer', member.trainer!),
+                _trainerRow(context, member.trainer!),
             ]),
             const SizedBox(height: 16),
             _buildQuickMetrics(member),
@@ -141,6 +144,32 @@ class MemberProfile extends ConsumerWidget {
           SizedBox(width: 80, child: Text(label, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary))),
           Expanded(child: Text(value, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textPrimary))),
         ],
+      ),
+    );
+  }
+
+  Widget _trainerRow(BuildContext context, String trainerName) {
+    final coach = coaches.cast<Coach?>().firstWhere(
+      (c) => c!.name == trainerName,
+      orElse: () => null,
+    );
+
+    return InkWell(
+      onTap: coach != null
+          ? () => Navigator.push(context, MaterialPageRoute(builder: (_) => CoachProfileView(coach: coach)))
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Icon(Icons.person_outline, size: 18, color: AppColors.textTertiary),
+            const SizedBox(width: 14),
+            SizedBox(width: 80, child: Text('Trainer', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary))),
+            Expanded(child: Text(trainerName, style: GoogleFonts.poppins(fontSize: 13, color: AppColors.accent, fontWeight: FontWeight.w500))),
+            if (coach != null)
+              Icon(Icons.chevron_right, size: 18, color: AppColors.textTertiary),
+          ],
+        ),
       ),
     );
   }

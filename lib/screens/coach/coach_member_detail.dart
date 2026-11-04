@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../../theme/app_theme.dart';
 import '../../data/models.dart';
 import '../../data/dummy_data.dart';
@@ -700,6 +701,10 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
           ),
           const SizedBox(height: 20),
           if (metrics.isNotEmpty) ...[
+            _progressChart('Weight Trend', metrics.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.weight)).toList(), AppColors.accent),
+            const SizedBox(height: 16),
+            _progressChart('BMI Trend', metrics.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.bmi)).toList(), AppColors.warning),
+            const SizedBox(height: 16),
             Text('Recent Readings', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
             const SizedBox(height: 12),
             ...metrics.reversed.take(5).map((m) => Padding(
@@ -755,6 +760,54 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
           ),
         ],
       ),
+      ),
+    );
+  }
+
+  Widget _progressChart(String title, List<FlSpot> spots, Color color) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 0.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 180,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (_) => FlLine(color: AppColors.border, strokeWidth: 0.5),
+                ),
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40, getTitlesWidget: (v, _) => Text(v.toStringAsFixed(1), style: GoogleFonts.poppins(fontSize: 10, color: AppColors.textTertiary)))),
+                  bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                ),
+                borderData: FlBorderData(show: false),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: spots,
+                    isCurved: true,
+                    color: color,
+                    barWidth: 2.5,
+                    dotData: const FlDotData(show: false),
+                    belowBarData: BarAreaData(show: true, color: color.withValues(alpha: 0.1)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -829,7 +882,7 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
                 padding: const EdgeInsets.all(16),
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.08),
+                  color: AppColors.accent.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
                 ),

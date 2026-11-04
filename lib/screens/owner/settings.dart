@@ -288,9 +288,9 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
   Widget _buildBannersSection(Gym gym) {
     final icons = [Icons.local_offer, Icons.emoji_events, Icons.star, Icons.campaign];
     final gradients = [
-      [AppColors.accent.withValues(alpha: 0.2), AppColors.accent.withValues(alpha: 0.06)],
-      [AppColors.success.withValues(alpha: 0.15), AppColors.success.withValues(alpha: 0.04)],
-      [AppColors.warning.withValues(alpha: 0.15), AppColors.warning.withValues(alpha: 0.04)],
+      [AppColors.accent.withValues(alpha: 0.2), AppColors.accent.withValues(alpha: 0.1)],
+      [AppColors.success.withValues(alpha: 0.15), AppColors.success.withValues(alpha: 0.08)],
+      [AppColors.warning.withValues(alpha: 0.15), AppColors.warning.withValues(alpha: 0.08)],
     ];
 
     return Container(

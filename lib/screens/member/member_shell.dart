@@ -6,6 +6,7 @@ import 'home.dart';
 import 'qr_checkin.dart';
 import 'workouts.dart';
 import 'diet_plan.dart';
+import 'progress.dart';
 import 'profile.dart';
 
 class MemberShell extends ConsumerWidget {
@@ -23,6 +24,7 @@ class MemberShell extends ConsumerWidget {
         QrCheckin(),
         MemberWorkouts(),
         MemberDietPlan(),
+        MemberProgress(),
         MemberProfile(),
       ],
       destinations: const [
@@ -45,6 +47,11 @@ class MemberShell extends ConsumerWidget {
           icon: Icon(Icons.restaurant_outlined),
           activeIcon: Icon(Icons.restaurant),
           label: 'Diet',
+        ),
+        AdaptiveDestination(
+          icon: Icon(Icons.trending_up_outlined),
+          activeIcon: Icon(Icons.trending_up),
+          label: 'Progress',
         ),
         AdaptiveDestination(
           icon: Icon(Icons.person_outline),

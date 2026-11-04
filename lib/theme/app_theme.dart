@@ -19,7 +19,7 @@ class AppColors {
 
   static const accent = Color(0xFFFF6B2C);
   static const success = Color(0xFF22C55E);
-  static const warning = Color(0xFFFBBF24);
+  static Color get warning => _isDark ? const Color(0xFFFBBF24) : const Color(0xFFD97706);
   static const danger = Color(0xFFEF4444);
 }
 

@@ -316,7 +316,7 @@ class OwnerDashboard extends ConsumerWidget {
       ));
     }
     if (config['Expiring Subscriptions'] == true) {
-      cards.add(const StatsCard(
+      cards.add(StatsCard(
         title: 'Expiring This Week',
         value: '5',
         icon: Icons.warning_amber_outlined,

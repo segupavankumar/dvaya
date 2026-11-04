@@ -130,7 +130,7 @@ class SoloHome extends ConsumerWidget {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [AppColors.accent.withValues(alpha: 0.2), AppColors.accent.withValues(alpha: 0.05)],
+                      colors: [AppColors.accent.withValues(alpha: 0.2), AppColors.accent.withValues(alpha: 0.1)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),

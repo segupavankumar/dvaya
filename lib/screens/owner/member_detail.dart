@@ -503,7 +503,7 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
                 padding: const EdgeInsets.all(16),
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.08),
+                  color: AppColors.accent.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
                 ),
