@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/responsive.dart';
 
 class CoachProfile extends ConsumerWidget {
   const CoachProfile({super.key});
@@ -18,8 +19,10 @@ class CoachProfile extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Profile', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 480,
+          padding: const EdgeInsets.all(20),
+          child: Column(
           children: [
             CircleAvatar(
               radius: 48,
@@ -109,6 +112,7 @@ class CoachProfile extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
           ],
+        ),
         ),
       ),
     );

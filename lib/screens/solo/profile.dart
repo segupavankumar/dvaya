@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/responsive.dart';
 
 class SoloProfile extends ConsumerWidget {
   const SoloProfile({super.key});
@@ -17,8 +18,10 @@ class SoloProfile extends ConsumerWidget {
         title: Text('Profile', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 480,
+          padding: const EdgeInsets.all(20),
+          child: Column(
           children: [
             // Avatar + name
             CircleAvatar(
@@ -139,6 +142,7 @@ class SoloProfile extends ConsumerWidget {
             ),
             const SizedBox(height: 20),
           ],
+        ),
         ),
       ),
     );

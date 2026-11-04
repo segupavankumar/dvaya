@@ -7,6 +7,7 @@ import '../../data/dummy_data.dart';
 import '../../data/models.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../widgets/responsive.dart';
 
 class OwnerSettings extends ConsumerStatefulWidget {
   const OwnerSettings({super.key});
@@ -36,8 +37,9 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Column(
+          child: ResponsiveCenter(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Settings', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
@@ -102,6 +104,7 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
               ),
               const SizedBox(height: 40),
             ],
+          ),
           ),
         ),
       ),

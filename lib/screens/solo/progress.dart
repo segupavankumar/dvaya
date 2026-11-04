@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
 import '../../widgets/streak_card.dart';
+import '../../widgets/responsive.dart';
 
 class SoloProgress extends StatefulWidget {
   const SoloProgress({super.key});
@@ -27,13 +28,15 @@ class _SoloProgressState extends State<SoloProgress> {
         title: Text('My Progress', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 480,
+          padding: const EdgeInsets.all(20),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Body metrics
-            GridView.count(
-              crossAxisCount: 2,
+            Builder(builder: (context) => GridView.count(
+              crossAxisCount: responsiveGridCount(context),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               mainAxisSpacing: 12,
@@ -45,7 +48,7 @@ class _SoloProgressState extends State<SoloProgress> {
                 _metricCard('Body Fat', '${_fat.toStringAsFixed(1)}%', Icons.water_drop_outlined, AppColors.warning),
                 _metricCard('Muscle', '${_muscle.toStringAsFixed(1)}%', Icons.fitness_center, AppColors.success),
               ],
-            ),
+            )),
             const SizedBox(height: 8),
             Align(
               alignment: Alignment.centerRight,
@@ -177,6 +180,7 @@ class _SoloProgressState extends State<SoloProgress> {
             ),
             const SizedBox(height: 20),
           ],
+        ),
         ),
       ),
     );

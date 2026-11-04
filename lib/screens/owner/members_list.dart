@@ -8,6 +8,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../widgets/member_card.dart';
 import 'member_detail.dart';
+import '../../widgets/responsive.dart';
 
 class MembersList extends ConsumerWidget {
   const MembersList({super.key});
@@ -72,7 +73,9 @@ class MembersList extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 600,
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -165,6 +168,7 @@ class MembersList extends ConsumerWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -7,6 +7,7 @@ import '../../providers/auth_provider.dart';
 import '../../data/models.dart';
 import '../../providers/settings_provider.dart';
 import 'coach_member_detail.dart';
+import '../../widgets/responsive.dart';
 
 class CoachHome extends ConsumerWidget {
   const CoachHome({super.key});
@@ -29,8 +30,10 @@ class CoachHome extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-          child: Column(
+          child: ResponsiveCenter(
+            maxWidth: 480,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -122,6 +125,7 @@ class CoachHome extends ConsumerWidget {
                   child: _traineeCard(context, ref, member),
                 )),
             ],
+          ),
           ),
         ),
       ),

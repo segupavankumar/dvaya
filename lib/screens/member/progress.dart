@@ -6,6 +6,7 @@ import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../data/dummy_data.dart';
 import '../../data/models.dart';
+import '../../widgets/responsive.dart';
 
 class MemberProgress extends ConsumerStatefulWidget {
   const MemberProgress({super.key});
@@ -48,8 +49,9 @@ class _MemberProgressState extends ConsumerState<MemberProgress> {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('My Progress', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ResponsiveCenter(
+          padding: const EdgeInsets.all(20),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildMetricsGrid(),
@@ -73,6 +75,7 @@ class _MemberProgressState extends ConsumerState<MemberProgress> {
             const SizedBox(height: 24),
           ],
         ),
+        ),
       ),
     );
   }
@@ -85,7 +88,7 @@ class _MemberProgressState extends ConsumerState<MemberProgress> {
       ('Muscle', '${_muscle.toStringAsFixed(1)}%', Icons.fitness_center, AppColors.success),
     ];
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: responsiveGridCount(context),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: 12,

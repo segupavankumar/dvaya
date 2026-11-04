@@ -26,7 +26,10 @@ class _CoachMembersState extends ConsumerState<CoachMembers> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('My Trainees', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
-      body: Column(
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
@@ -79,6 +82,8 @@ class _CoachMembersState extends ConsumerState<CoachMembers> {
                   ),
           ),
         ],
+      ),
+        ),
       ),
     );
   }

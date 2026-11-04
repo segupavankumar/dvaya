@@ -6,6 +6,7 @@ import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
 import '../../providers/settings_provider.dart';
 import '../../widgets/streak_card.dart';
+import '../../widgets/responsive.dart';
 
 class SoloHome extends ConsumerWidget {
   const SoloHome({super.key});
@@ -21,8 +22,10 @@ class SoloHome extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
+          child: ResponsiveCenter(
+            maxWidth: 480,
+            padding: const EdgeInsets.all(20),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
@@ -36,8 +39,8 @@ class SoloHome extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
 
-              GridView.count(
-                crossAxisCount: 2,
+              Builder(builder: (context) => GridView.count(
+                crossAxisCount: responsiveGridCount(context),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 mainAxisSpacing: 12,
@@ -49,7 +52,7 @@ class SoloHome extends ConsumerWidget {
                   _quickAction(ref, Icons.restaurant_menu, 'Diet Log', AppColors.warning, 2),
                   _quickAction(ref, Icons.monitor_weight_outlined, 'Check Weight', Colors.blueAccent, 3),
                 ],
-              ),
+              )),
               const SizedBox(height: 24),
 
               if (todayWorkout != null) ...[
@@ -149,6 +152,7 @@ class SoloHome extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
             ],
+          ),
           ),
         ),
       ),

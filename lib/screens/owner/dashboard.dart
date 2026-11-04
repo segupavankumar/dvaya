@@ -7,6 +7,7 @@ import '../../data/dummy_data.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../widgets/stats_card.dart';
+import '../../widgets/responsive.dart';
 
 class OwnerDashboard extends ConsumerWidget {
   const OwnerDashboard({super.key});
@@ -29,8 +30,10 @@ class OwnerDashboard extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Column(
+          child: ResponsiveCenter(
+            maxWidth: 600,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Gym banner/cover
@@ -114,6 +117,7 @@ class OwnerDashboard extends ConsumerWidget {
 
               const SizedBox(height: 24),
             ],
+          ),
           ),
         ),
       ),
@@ -277,15 +281,15 @@ class OwnerDashboard extends ConsumerWidget {
 
     if (cards.isEmpty) return const SizedBox.shrink();
 
-    return GridView.count(
-      crossAxisCount: 2,
+    return Builder(builder: (context) => GridView.count(
+      crossAxisCount: responsiveGridCount(context),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
       childAspectRatio: 1.0,
       children: cards,
-    );
+    ));
   }
 
   Widget _buildHeatmap(BuildContext context) {

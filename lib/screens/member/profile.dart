@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import 'payments.dart';
+import '../../widgets/responsive.dart';
 
 class MemberProfile extends ConsumerWidget {
   const MemberProfile({super.key});
@@ -18,8 +19,9 @@ class MemberProfile extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Profile', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ResponsiveCenter(
+          padding: const EdgeInsets.all(20),
+          child: Column(
           children: [
             CircleAvatar(
               radius: 48,
@@ -109,6 +111,7 @@ class MemberProfile extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
           ],
+        ),
         ),
       ),
     );

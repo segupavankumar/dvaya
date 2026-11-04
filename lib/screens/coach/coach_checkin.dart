@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/responsive.dart';
 
 class CoachCheckin extends ConsumerStatefulWidget {
   const CoachCheckin({super.key});
@@ -26,8 +27,10 @@ class _CoachCheckinState extends ConsumerState<CoachCheckin> {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Check In / Out', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 480,
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          child: Column(
           children: [
             Container(
               width: double.infinity,
@@ -161,6 +164,7 @@ class _CoachCheckinState extends ConsumerState<CoachCheckin> {
                 ),
               )),
           ],
+        ),
         ),
       ),
     );

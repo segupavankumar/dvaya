@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/settings_provider.dart';
+import '../../widgets/adaptive_shell.dart';
 import 'dashboard.dart';
 import 'members_list.dart';
 import 'settings.dart';
@@ -14,14 +15,31 @@ class OwnerShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(ownerTabProvider);
 
-    final screens = const [
-      OwnerDashboard(),
-      MembersList(),
-      OwnerSettings(),
-    ];
-
-    return Scaffold(
-      body: IndexedStack(index: currentIndex, children: screens),
+    return AdaptiveShell(
+      currentIndex: currentIndex,
+      onTap: (i) => ref.read(ownerTabProvider.notifier).state = i,
+      screens: const [
+        OwnerDashboard(),
+        MembersList(),
+        OwnerSettings(),
+      ],
+      destinations: const [
+        AdaptiveDestination(
+          icon: Icon(Icons.dashboard_outlined),
+          activeIcon: Icon(Icons.dashboard),
+          label: 'Dashboard',
+        ),
+        AdaptiveDestination(
+          icon: Icon(Icons.people_outline),
+          activeIcon: Icon(Icons.people),
+          label: 'Members',
+        ),
+        AdaptiveDestination(
+          icon: Icon(Icons.settings_outlined),
+          activeIcon: Icon(Icons.settings),
+          label: 'Settings',
+        ),
+      ],
       floatingActionButton: currentIndex == 1
           ? null
           : FloatingActionButton(
@@ -29,33 +47,6 @@ class OwnerShell extends ConsumerWidget {
               onPressed: () => _showAddMemberSheet(context),
               child: const Icon(Icons.person_add, color: Colors.white),
             ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.border, width: 0.5)),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: currentIndex,
-          onTap: (i) => ref.read(ownerTabProvider.notifier).state = i,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard_outlined),
-              activeIcon: Icon(Icons.dashboard),
-              label: 'Dashboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.people_outline),
-              activeIcon: Icon(Icons.people),
-              label: 'Members',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
-          ],
-        ),
-      ),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../data/models.dart';
+import '../../widgets/responsive.dart';
 
 class MemberPayments extends ConsumerWidget {
   const MemberPayments({super.key});
@@ -20,8 +21,9 @@ class MemberPayments extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Payments', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: ResponsiveCenter(
+          padding: const EdgeInsets.all(20),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildCurrentPlan(member, daysLeft, isExpired),
@@ -36,6 +38,7 @@ class MemberPayments extends ConsumerWidget {
             ...member.payments.map((p) => _buildPaymentItem(p)),
             const SizedBox(height: 24),
           ],
+        ),
         ),
       ),
     );

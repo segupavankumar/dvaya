@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
 import '../../data/models.dart';
+import '../../widgets/responsive.dart';
 
 class SoloWorkouts extends StatefulWidget {
   const SoloWorkouts({super.key});
@@ -42,7 +43,9 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 480,
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Date picker bar
@@ -179,6 +182,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
             ),
             const SizedBox(height: 80),
           ],
+        ),
         ),
       ),
     );

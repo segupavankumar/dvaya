@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
 import '../../data/models.dart';
+import '../../widgets/responsive.dart';
 
 class SoloDiet extends StatefulWidget {
   const SoloDiet({super.key});
@@ -37,7 +38,9 @@ class _SoloDietState extends State<SoloDiet> {
         title: Text('My Diet', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: ResponsiveCenter(
+          maxWidth: 480,
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Date picker
@@ -154,6 +157,7 @@ class _SoloDietState extends State<SoloDiet> {
             ),
             const SizedBox(height: 80),
           ],
+        ),
         ),
       ),
     );

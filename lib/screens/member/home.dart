@@ -8,6 +8,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../data/dummy_data.dart';
 import '../../widgets/streak_card.dart';
+import '../../widgets/responsive.dart';
 
 class MemberHome extends ConsumerStatefulWidget {
   const MemberHome({super.key});
@@ -40,8 +41,9 @@ class _MemberHomeState extends ConsumerState<MemberHome> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 24),
-          child: Column(
+          child: ResponsiveCenter(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCover(gym.name),
@@ -72,6 +74,7 @@ class _MemberHomeState extends ConsumerState<MemberHome> {
                 ),
               ),
             ],
+          ),
           ),
         ),
       ),

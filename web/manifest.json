@@ -1,12 +1,11 @@
 {
-    "name": "dvaya_app",
-    "short_name": "dvaya_app",
+    "name": "Dvaya",
+    "short_name": "Dvaya",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#0F0F0F",
+    "theme_color": "#FF6B2C",
+    "description": "Premium Gym Management",
     "prefer_related_applications": false,
     "icons": [
         {

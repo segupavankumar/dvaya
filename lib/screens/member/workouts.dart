@@ -6,6 +6,7 @@ import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../data/dummy_data.dart';
 import '../../data/models.dart';
+import '../../widgets/responsive.dart';
 
 class MemberWorkouts extends ConsumerStatefulWidget {
   const MemberWorkouts({super.key});
@@ -34,7 +35,9 @@ class _MemberWorkoutsState extends ConsumerState<MemberWorkouts> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Workouts', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
-      body: Column(
+      body: ResponsiveCenter(
+        maxWidth: 600,
+        child: Column(
         children: [
           _buildDateBar(),
           Expanded(
@@ -57,6 +60,7 @@ class _MemberWorkoutsState extends ConsumerState<MemberWorkouts> {
                   ),
           ),
         ],
+      ),
       ),
     );
   }

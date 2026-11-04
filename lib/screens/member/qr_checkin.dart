@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../data/dummy_data.dart';
+import '../../widgets/responsive.dart';
 
 class QrCheckin extends ConsumerStatefulWidget {
   const QrCheckin({super.key});
@@ -74,8 +75,9 @@ class _QrCheckinState extends ConsumerState<QrCheckin> with SingleTickerProvider
       appBar: AppBar(title: Text('QR Check-In', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
+          child: ResponsiveCenter(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
             children: [
               const SizedBox(height: 24),
               CircleAvatar(
@@ -173,6 +175,7 @@ class _QrCheckinState extends ConsumerState<QrCheckin> with SingleTickerProvider
               ),
               const SizedBox(height: 32),
             ],
+          ),
           ),
         ),
       ),

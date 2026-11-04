@@ -6,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../theme/app_theme.dart';
 import '../../data/models.dart';
 import '../../data/dummy_data.dart';
+import '../../widgets/responsive.dart';
 
 class CoachMemberDetail extends ConsumerStatefulWidget {
   final Member member;
@@ -136,8 +137,10 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
   // ===== OVERVIEW TAB =====
   Widget _buildOverview(Member member) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      child: Column(
+      child: ResponsiveCenter(
+        maxWidth: 600,
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -245,6 +248,7 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
           ),
         ],
       ),
+      ),
     );
   }
 
@@ -285,8 +289,10 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final dayWorkout = workouts[selectedDate];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      child: Column(
+      child: ResponsiveCenter(
+        maxWidth: 600,
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCalendarBar(),
@@ -337,6 +343,7 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
             ),
           ],
         ],
+      ),
       ),
     );
   }
@@ -461,8 +468,10 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final dayDiet = diets[selectedDate];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      child: Column(
+      child: ResponsiveCenter(
+        maxWidth: 600,
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCalendarBar(),
@@ -537,6 +546,7 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
             ),
           ],
         ],
+      ),
       ),
     );
   }
@@ -671,8 +681,10 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final metrics = member.bodyMetrics;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      child: Column(
+      child: ResponsiveCenter(
+        maxWidth: 600,
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -743,6 +755,7 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
           ),
         ],
       ),
+      ),
     );
   }
 
@@ -762,8 +775,10 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final attendanceDates = {for (var a in member.attendance) DateTime(a.date.year, a.date.month, a.date.day): a};
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-      child: Column(
+      child: ResponsiveCenter(
+        maxWidth: 600,
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -877,6 +892,7 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
             ),
           ),
         ],
+      ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../theme/app_theme.dart';
 import '../../data/dummy_data.dart';
 import '../../data/models.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/responsive.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -25,8 +26,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
+          child: ResponsiveCenter(
+            maxWidth: 420,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
             children: [
               const SizedBox(height: 80),
               _buildLogo(),
@@ -47,6 +50,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ],
               const SizedBox(height: 40),
             ],
+          ),
           ),
         ),
       ),
