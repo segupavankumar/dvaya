@@ -137,8 +137,8 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
   // ===== OVERVIEW TAB =====
   Widget _buildOverview(Member member) {
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -289,8 +289,8 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final dayWorkout = workouts[selectedDate];
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -468,8 +468,8 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final dayDiet = diets[selectedDate];
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -681,8 +681,8 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final metrics = member.bodyMetrics;
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -775,8 +775,8 @@ class _CoachMemberDetailState extends ConsumerState<CoachMemberDetail> with Tick
     final attendanceDates = {for (var a in member.attendance) DateTime(a.date.year, a.date.month, a.date.day): a};
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

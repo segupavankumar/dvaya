@@ -28,80 +28,158 @@ class _OwnerSettingsState extends ConsumerState<OwnerSettings> {
     }
   }
 
+  Widget _buildAppearanceToggle() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border, width: 0.5),
+      ),
+      child: Row(
+        children: [
+          Icon(ref.watch(themeModeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode, color: AppColors.accent, size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Dark Mode', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+                Text(ref.watch(themeModeProvider) == ThemeMode.dark ? 'Currently dark' : 'Currently light', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+              ],
+            ),
+          ),
+          Switch(
+            value: ref.watch(themeModeProvider) == ThemeMode.dark,
+            onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () => ref.read(authProvider.notifier).logout(),
+        icon: const Icon(Icons.logout, color: AppColors.danger),
+        label: Text('Logout', style: GoogleFonts.poppins(color: AppColors.danger)),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: AppColors.danger),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gym = ref.watch(authProvider).selectedGym!;
     final dashConfig = ref.watch(dashboardConfigProvider);
+    final desktop = Responsive.isDesktop(context);
+
+    final profileSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader('Gym Profile'),
+        const SizedBox(height: 12),
+        _buildProfileSection(gym),
+      ],
+    );
+
+    final plansSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader('Subscription Plans'),
+        const SizedBox(height: 12),
+        _buildPlansSection(),
+      ],
+    );
+
+    final bannersSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader('Advertising Banners'),
+        const SizedBox(height: 12),
+        _buildBannersSection(gym),
+      ],
+    );
+
+    final dashConfigSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader('Dashboard Customization'),
+        const SizedBox(height: 12),
+        _buildDashboardConfig(dashConfig),
+      ],
+    );
+
+    final appearanceSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader('Appearance'),
+        const SizedBox(height: 12),
+        _buildAppearanceToggle(),
+      ],
+    );
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: ResponsiveCenter(
+          child: DesktopAwareCenter(
+            desktopMaxWidth: 1000,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Settings', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
               const SizedBox(height: 24),
-              _sectionHeader('Gym Profile'),
-              const SizedBox(height: 12),
-              _buildProfileSection(gym),
-              const SizedBox(height: 24),
-              _sectionHeader('Advertising Banners'),
-              const SizedBox(height: 12),
-              _buildBannersSection(gym),
-              const SizedBox(height: 24),
-              _sectionHeader('Dashboard Customization'),
-              const SizedBox(height: 12),
-              _buildDashboardConfig(dashConfig),
-              const SizedBox(height: 24),
-              _sectionHeader('Subscription Plans'),
-              const SizedBox(height: 12),
-              _buildPlansSection(),
-              const SizedBox(height: 24),
-              _sectionHeader('Appearance'),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border, width: 0.5),
-                ),
-                child: Row(
+              if (desktop)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(ref.watch(themeModeProvider) == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode, color: AppColors.accent, size: 22),
-                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Dark Mode', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
-                          Text(ref.watch(themeModeProvider) == ThemeMode.dark ? 'Currently dark' : 'Currently light', style: GoogleFonts.poppins(fontSize: 11, color: AppColors.textTertiary)),
+                          profileSection,
+                          const SizedBox(height: 24),
+                          plansSection,
+                          const SizedBox(height: 24),
+                          _buildLogoutButton(),
                         ],
                       ),
                     ),
-                    Switch(
-                      value: ref.watch(themeModeProvider) == ThemeMode.dark,
-                      onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light,
+                    const SizedBox(width: 24),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          bannersSection,
+                          const SizedBox(height: 24),
+                          dashConfigSection,
+                          const SizedBox(height: 24),
+                          appearanceSection,
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: () => ref.read(authProvider.notifier).logout(),
-                  icon: const Icon(Icons.logout, color: AppColors.danger),
-                  label: Text('Logout', style: GoogleFonts.poppins(color: AppColors.danger)),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.danger),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                ),
-              ),
+                )
+              else ...[
+                profileSection,
+                const SizedBox(height: 24),
+                bannersSection,
+                const SizedBox(height: 24),
+                dashConfigSection,
+                const SizedBox(height: 24),
+                plansSection,
+                const SizedBox(height: 24),
+                appearanceSection,
+                const SizedBox(height: 24),
+                _buildLogoutButton(),
+              ],
               const SizedBox(height: 40),
             ],
           ),

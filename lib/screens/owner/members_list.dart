@@ -73,8 +73,8 @@ class MembersList extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: ResponsiveCenter(
-          maxWidth: 600,
+        child: DesktopAwareCenter(
+          desktopMaxWidth: 1200,
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,26 +146,7 @@ class MembersList extends ConsumerWidget {
               child: Text('${allMembers.length} members', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary)),
             ),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 80),
-                itemCount: allMembers.length,
-                itemBuilder: (context, index) {
-                  final member = allMembers[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: MemberCard(
-                      member: member,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => MemberDetail(member: member)),
-                        );
-                      },
-                      onNotify: () => _showNotifyMemberSheet(context, member),
-                    ),
-                  );
-                },
-              ),
+              child: _buildMemberGrid(context, allMembers),
             ),
           ],
         ),
@@ -176,6 +157,45 @@ class MembersList extends ConsumerWidget {
         onPressed: () => _showAddMemberSheet(context),
         child: const Icon(Icons.person_add, color: Colors.white),
       ),
+    );
+  }
+
+  Widget _buildMemberGrid(BuildContext context, List<Member> allMembers) {
+    final cols = responsiveGridCount(context, mobile: 1, tablet: 2, desktop: 3);
+    if (cols == 1) {
+      return ListView.builder(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 80),
+        itemCount: allMembers.length,
+        itemBuilder: (context, index) {
+          final member = allMembers[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: MemberCard(
+              member: member,
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => MemberDetail(member: member))),
+              onNotify: () => _showNotifyMemberSheet(context, member),
+            ),
+          );
+        },
+      );
+    }
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 80),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: cols,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 10,
+        childAspectRatio: 2.8,
+      ),
+      itemCount: allMembers.length,
+      itemBuilder: (context, index) {
+        final member = allMembers[index];
+        return MemberCard(
+          member: member,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => MemberDetail(member: member))),
+          onNotify: () => _showNotifyMemberSheet(context, member),
+        );
+      },
     );
   }
 

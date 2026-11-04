@@ -30,18 +30,15 @@ class OwnerDashboard extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: ResponsiveCenter(
-            maxWidth: 600,
+          child: DesktopAwareCenter(
+            desktopMaxWidth: 1200,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Gym banner/cover
-              _buildGymBanner(gym.name),
-              const SizedBox(height: 16),
+            child: Builder(builder: (context) {
+              final desktop = Responsive.isDesktop(context);
 
-              // Top bar
-              Row(
+              final banner = _buildGymBanner(gym.name);
+
+              final topBar = Row(
                 children: [
                   Expanded(
                     child: Column(
@@ -63,61 +60,118 @@ class OwnerDashboard extends ConsumerWidget {
                     tooltip: 'Settings',
                   ),
                 ],
-              ),
-              const SizedBox(height: 20),
+              );
 
-              // Alert card
-              if (config['Due Today Alert'] == true)
-                _buildAlertCard(context, ref),
+              final alertCard = config['Due Today Alert'] == true
+                  ? Padding(padding: const EdgeInsets.only(bottom: 20), child: _buildAlertCard(context, ref))
+                  : const SizedBox.shrink();
 
-              if (config['Due Today Alert'] == true)
-                const SizedBox(height: 20),
+              final statsGrid = _buildStatsGrid(config, gym);
 
-              // Stats grid
-              _buildStatsGrid(config, gym),
-              const SizedBox(height: 20),
+              final heatmapSection = config['Attendance Heatmap'] == true
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Attendance Heatmap', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                        const SizedBox(height: 4),
+                        Text('Tap any date to see check-ins', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
+                        const SizedBox(height: 12),
+                        _buildHeatmap(context),
+                      ],
+                    )
+                  : const SizedBox.shrink();
 
-              // Attendance heatmap
-              if (config['Attendance Heatmap'] == true) ...[
-                Text('Attendance Heatmap', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
-                const SizedBox(height: 4),
-                Text('Tap any date to see check-ins', style: GoogleFonts.poppins(fontSize: 12, color: AppColors.textTertiary)),
-                const SizedBox(height: 12),
-                _buildHeatmap(context),
-                const SizedBox(height: 20),
-              ],
+              final activitySection = config['Recent Activity'] == true
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Recent Activity', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                        const SizedBox(height: 12),
+                        _buildActivityFeed(),
+                      ],
+                    )
+                  : const SizedBox.shrink();
 
-              // Recent activity
-              if (config['Recent Activity'] == true) ...[
-                Text('Recent Activity', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
-                const SizedBox(height: 12),
-                _buildActivityFeed(),
-              ],
+              final emptyState = !config.values.any((v) => v)
+                  ? Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(40),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.border, width: 0.5),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.dashboard_customize_outlined, size: 48, color: AppColors.textTertiary),
+                          const SizedBox(height: 12),
+                          Text('No cards visible', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
+                          const SizedBox(height: 4),
+                          Text('Enable cards in Settings > Dashboard Customization', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary), textAlign: TextAlign.center),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink();
 
-              // Empty state
-              if (!config.values.any((v) => v))
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(40),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border, width: 0.5),
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(Icons.dashboard_customize_outlined, size: 48, color: AppColors.textTertiary),
-                      const SizedBox(height: 12),
-                      Text('No cards visible', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.textSecondary)),
-                      const SizedBox(height: 4),
-                      Text('Enable cards in Settings > Dashboard Customization', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textTertiary), textAlign: TextAlign.center),
-                    ],
-                  ),
-                ),
+              if (desktop) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    banner,
+                    const SizedBox(height: 16),
+                    topBar,
+                    const SizedBox(height: 20),
+                    alertCard,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              statsGrid,
+                              const SizedBox(height: 20),
+                              activitySection,
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              heatmapSection,
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    emptyState,
+                    const SizedBox(height: 24),
+                  ],
+                );
+              }
 
-              const SizedBox(height: 24),
-            ],
-          ),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  banner,
+                  const SizedBox(height: 16),
+                  topBar,
+                  const SizedBox(height: 20),
+                  alertCard,
+                  statsGrid,
+                  const SizedBox(height: 20),
+                  heatmapSection,
+                  if (config['Attendance Heatmap'] == true) const SizedBox(height: 20),
+                  activitySection,
+                  emptyState,
+                  const SizedBox(height: 24),
+                ],
+              );
+            }),
           ),
         ),
       ),

@@ -34,12 +34,13 @@ class _SoloDietState extends State<SoloDiet> {
     final diet = _diets[_selectedDate];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('My Diet', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
       ),
       body: SingleChildScrollView(
-        child: ResponsiveCenter(
-          maxWidth: 480,
+        child: DesktopAwareCenter(
+          desktopMaxWidth: 800,
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

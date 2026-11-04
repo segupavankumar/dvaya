@@ -18,7 +18,7 @@ class MemberShell extends ConsumerWidget {
     return AdaptiveShell(
       currentIndex: currentIndex,
       onTap: (i) => ref.read(memberTabProvider.notifier).state = i,
-      screens: const [
+      screens: [
         MemberHome(),
         QrCheckin(),
         MemberWorkouts(),

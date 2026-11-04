@@ -18,7 +18,7 @@ class SoloShell extends ConsumerWidget {
     return AdaptiveShell(
       currentIndex: currentIndex,
       onTap: (i) => ref.read(soloTabProvider.notifier).state = i,
-      screens: const [
+      screens: [
         SoloHome(),
         SoloWorkouts(),
         SoloDiet(),

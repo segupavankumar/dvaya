@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../data/models.dart';
-import '../../providers/settings_provider.dart';
 import 'coach_member_detail.dart';
 import '../../widgets/responsive.dart';
 
@@ -30,8 +29,8 @@ class CoachHome extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: ResponsiveCenter(
-            maxWidth: 480,
+          child: DesktopAwareCenter(
+            desktopMaxWidth: 1000,
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,55 +74,84 @@ class CoachHome extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border, width: 0.5),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Specialization', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppColors.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(coach.specialization, style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.accent)),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              Text('Your Trainees', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
-              const SizedBox(height: 12),
-              if (assignedMembers.isEmpty)
-                Container(
+              Builder(builder: (context) {
+                final desktop = Responsive.isDesktop(context);
+
+                final specCard = Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: AppColors.border, width: 0.5),
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.people_outline, color: AppColors.textTertiary, size: 48),
-                      const SizedBox(height: 12),
-                      Text('No trainees assigned', style: GoogleFonts.poppins(color: AppColors.textTertiary)),
+                      Text('Specialization', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.accent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(coach.specialization, style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.accent)),
+                      ),
                     ],
                   ),
-                )
-              else
-                ...assignedMembers.map((member) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: _traineeCard(context, ref, member),
-                )),
+                );
+
+                final traineesList = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Your Trainees', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                    const SizedBox(height: 12),
+                    if (assignedMembers.isEmpty)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(32),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.border, width: 0.5),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(Icons.people_outline, color: AppColors.textTertiary, size: 48),
+                            const SizedBox(height: 12),
+                            Text('No trainees assigned', style: GoogleFonts.poppins(color: AppColors.textTertiary)),
+                          ],
+                        ),
+                      )
+                    else
+                      ...assignedMembers.map((member) => Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _traineeCard(context, ref, member),
+                      )),
+                  ],
+                );
+
+                if (desktop) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 2, child: traineesList),
+                      const SizedBox(width: 20),
+                      Expanded(flex: 1, child: specCard),
+                    ],
+                  );
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    specCard,
+                    const SizedBox(height: 24),
+                    traineesList,
+                  ],
+                );
+              }),
             ],
           ),
           ),

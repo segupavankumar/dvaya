@@ -41,7 +41,8 @@ class _MemberHomeState extends ConsumerState<MemberHome> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: ResponsiveCenter(
+          child: DesktopAwareCenter(
+            desktopMaxWidth: 1000,
             padding: const EdgeInsets.only(bottom: 24),
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,29 +50,75 @@ class _MemberHomeState extends ConsumerState<MemberHome> {
               _buildCover(gym.name),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20),
-                    Text('Hey $firstName', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
-                    const SizedBox(height: 4),
-                    Text(gym.name, style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textSecondary)),
-                    const SizedBox(height: 20),
-                    if (gym.bannerUrls.isNotEmpty) _buildBannerCarousel(gym.bannerUrls),
-                    if (gym.bannerUrls.isNotEmpty) const SizedBox(height: 20),
-                    _buildQuickActions(ref),
-                    const SizedBox(height: 20),
-                    if (todayWorkout != null && todayWorkout.isNotEmpty) ...[
-                      _buildWorkoutPreview(todayWorkout.first, ref),
-                      const SizedBox(height: 16),
+                child: Builder(builder: (context) {
+                  final desktop = Responsive.isDesktop(context);
+
+                  final greeting = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      Text('Hey $firstName', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+                      const SizedBox(height: 4),
+                      Text(gym.name, style: GoogleFonts.poppins(fontSize: 14, color: AppColors.textSecondary)),
+                      const SizedBox(height: 20),
                     ],
-                    if (todayDiet != null) ...[
-                      _buildDietPreview(todayDiet, ref),
-                      const SizedBox(height: 16),
+                  );
+
+                  final bannerSection = gym.bannerUrls.isNotEmpty
+                      ? Column(children: [_buildBannerCarousel(gym.bannerUrls), const SizedBox(height: 20)])
+                      : const SizedBox.shrink();
+
+                  final quickActions = _buildQuickActions(ref);
+
+                  final workoutSection = (todayWorkout != null && todayWorkout.isNotEmpty)
+                      ? Column(children: [_buildWorkoutPreview(todayWorkout.first, ref), const SizedBox(height: 16)])
+                      : const SizedBox.shrink();
+
+                  final dietSection = todayDiet != null
+                      ? Column(children: [_buildDietPreview(todayDiet, ref), const SizedBox(height: 16)])
+                      : const SizedBox.shrink();
+
+                  final streakSection = StreakCard(streak: member.streak, weekDots: weekDots);
+
+                  if (desktop) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        greeting,
+                        bannerSection,
+                        quickActions,
+                        const SizedBox(height: 20),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Column(children: [workoutSection, dietSection]),
+                            ),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              flex: 2,
+                              child: streakSection,
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      greeting,
+                      bannerSection,
+                      quickActions,
+                      const SizedBox(height: 20),
+                      workoutSection,
+                      dietSection,
+                      streakSection,
                     ],
-                    StreakCard(streak: member.streak, weekDots: weekDots),
-                  ],
-                ),
+                  );
+                }),
               ),
             ],
           ),

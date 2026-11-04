@@ -6,6 +6,7 @@ import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../data/models.dart';
 import 'coach_member_detail.dart';
+import '../../widgets/responsive.dart';
 
 class CoachMembers extends ConsumerStatefulWidget {
   const CoachMembers({super.key});
@@ -26,9 +27,8 @@ class _CoachMembersState extends ConsumerState<CoachMembers> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('My Trainees', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
+      body: DesktopAwareCenter(
+          desktopMaxWidth: 1000,
           child: Column(
         children: [
           Padding(
@@ -83,7 +83,6 @@ class _CoachMembersState extends ConsumerState<CoachMembers> {
           ),
         ],
       ),
-        ),
       ),
     );
   }

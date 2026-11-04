@@ -75,7 +75,8 @@ class _QrCheckinState extends ConsumerState<QrCheckin> with SingleTickerProvider
       appBar: AppBar(title: Text('QR Check-In', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: ResponsiveCenter(
+          child: DesktopAwareCenter(
+            desktopMaxWidth: 600,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
             children: [

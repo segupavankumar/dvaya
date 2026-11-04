@@ -34,6 +34,7 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
     final todayWorkouts = _workouts[_selectedDate] ?? [];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('My Workouts', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
       ),
@@ -43,8 +44,8 @@ class _SoloWorkoutsState extends State<SoloWorkouts> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: SingleChildScrollView(
-        child: ResponsiveCenter(
-          maxWidth: 480,
+        child: DesktopAwareCenter(
+          desktopMaxWidth: 800,
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

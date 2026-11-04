@@ -21,7 +21,8 @@ class MemberPayments extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Payments', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
-        child: ResponsiveCenter(
+        child: DesktopAwareCenter(
+          desktopMaxWidth: 800,
           padding: const EdgeInsets.all(20),
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

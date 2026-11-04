@@ -18,7 +18,7 @@ class OwnerShell extends ConsumerWidget {
     return AdaptiveShell(
       currentIndex: currentIndex,
       onTap: (i) => ref.read(ownerTabProvider.notifier).state = i,
-      screens: const [
+      screens: [
         OwnerDashboard(),
         MembersList(),
         OwnerSettings(),

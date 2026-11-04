@@ -36,6 +36,7 @@ class AdaptiveShell extends StatelessWidget {
 
     if (isWide) {
       return Scaffold(
+        backgroundColor: AppColors.background,
         body: Row(
           children: [
             NavigationRail(

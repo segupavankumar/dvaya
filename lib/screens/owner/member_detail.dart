@@ -298,8 +298,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   // ===== OVERVIEW TAB =====
   Widget _buildOverview(Member member) {
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,8 +448,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final attendanceDates = {for (var a in member.attendance) DateTime(a.date.year, a.date.month, a.date.day): a};
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -602,8 +602,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     }
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -811,8 +811,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final dayWorkout = workouts[selectedDate];
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -978,8 +978,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final dayDiet = diets[selectedDate];
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1161,8 +1161,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
   // ===== GOALS TAB =====
   Widget _buildGoals(Member member) {
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1315,8 +1315,8 @@ class _MemberDetailState extends ConsumerState<MemberDetail> with TickerProvider
     final isOverdue = daysLeft < 0;
 
     return SingleChildScrollView(
-      child: ResponsiveCenter(
-        maxWidth: 600,
+      child: DesktopAwareCenter(
+        desktopMaxWidth: 1000,
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

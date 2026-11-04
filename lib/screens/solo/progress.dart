@@ -24,12 +24,13 @@ class _SoloProgressState extends State<SoloProgress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('My Progress', style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
       ),
       body: SingleChildScrollView(
-        child: ResponsiveCenter(
-          maxWidth: 480,
+        child: DesktopAwareCenter(
+          desktopMaxWidth: 800,
           padding: const EdgeInsets.all(20),
           child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

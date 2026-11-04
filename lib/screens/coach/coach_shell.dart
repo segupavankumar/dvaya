@@ -17,7 +17,7 @@ class CoachShell extends ConsumerWidget {
     return AdaptiveShell(
       currentIndex: currentIndex,
       onTap: (i) => ref.read(coachTabProvider.notifier).state = i,
-      screens: const [
+      screens: [
         CoachHome(),
         CoachMembers(),
         CoachCheckin(),

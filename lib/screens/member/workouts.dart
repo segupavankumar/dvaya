@@ -35,8 +35,8 @@ class _MemberWorkoutsState extends ConsumerState<MemberWorkouts> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Workouts', style: GoogleFonts.poppins(fontWeight: FontWeight.w600))),
-      body: ResponsiveCenter(
-        maxWidth: 600,
+      body: DesktopAwareCenter(
+        desktopMaxWidth: 800,
         child: Column(
         children: [
           _buildDateBar(),
